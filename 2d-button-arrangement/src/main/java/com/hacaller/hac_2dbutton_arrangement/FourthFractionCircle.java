@@ -85,7 +85,7 @@ public class FourthFractionCircle extends BaseShapeView {
         pathDst.arcTo(rectF, -90f, -90f);
         pathDst.close();
         // Default: yellow
-        Bitmap bmDst = makeDst(pathDst, defColors[3], superRadius);
+        Bitmap bmDst = makeDst(pathDst, defColors[BTN_NW], superRadius);
         canvas.drawBitmap(bmDst, 0, 0, paint);
         paint.setXfermode(null);
     }
@@ -112,7 +112,7 @@ public class FourthFractionCircle extends BaseShapeView {
         pathDst.arcTo(rectDst, 0f, -90f);
         pathDst.close();
         // Default: red
-        Bitmap bmDst = makeDst(pathDst, defColors[0], superRadius);
+        Bitmap bmDst = makeDst(pathDst, defColors[BTN_NE], superRadius);
         canvas.drawBitmap(bmDst, outterRadius, 0, paint);
         paint.setXfermode(null);
     }
@@ -137,7 +137,7 @@ public class FourthFractionCircle extends BaseShapeView {
         pathDst.arcTo(rectDst, 0f, 90f);
         pathDst.close();
         // Default: blue
-        Bitmap bmDst = makeDst(pathDst, defColors[1], superRadius);
+        Bitmap bmDst = makeDst(pathDst, defColors[BTN_SE], superRadius);
         canvas.drawBitmap(bmDst, outterRadius, outterRadius, paint);
         paint.setXfermode(null);
     }
@@ -164,57 +164,45 @@ public class FourthFractionCircle extends BaseShapeView {
         pathDst.arcTo(rectDst, 90f, 90f);
         pathDst.close();
         //Default: green
-        Bitmap bmDst = makeDst(pathDst, defColors[2], superRadius);
+        Bitmap bmDst = makeDst(pathDst, defColors[BTN_SW], superRadius);
         canvas.drawBitmap(bmDst, 0f, outterRadius, paint);
         paint.setXfermode(null);
     }
 
 
-
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            float x = event.getX()-superRadius;
-            float y = superRadius - event.getY();
-            Log.d("Coordinates", String.format("x: %f, y: %f", x ,y));
-            boolean inside = (x*x + y*y < outterRadius*outterRadius)
-                    && (x*x + y*y > innerRadius*innerRadius);
-            if ( inside ) {
-                if (x > 0 && y > 0){
-                    indexButton = 0;
-                    startButtonBlink();
-                    if (onClickTopRightSlice != null){
-                        onClickTopRightSlice.onClick();
-                    }
-                }
-                if (x < 0 && y > 0){
-                    indexButton = 3;
-                    startButtonBlink();
-                    if (onClickTopLeftSlice != null){
-                        onClickTopLeftSlice.onClick();
-                    }
-                }
-                if (x < 0 && y < 0){
-                    indexButton = 2;
-                    startButtonBlink();
-                    if (onClickBottomLeftSlice != null) {
-                        onClickBottomLeftSlice.onClick();
-                    }
-                }
-                if (x > 0 && y < 0){
-                    indexButton = 1;
-                    startButtonBlink();
-                    if (onClickBottomRightSlice != null) {
-                        onClickBottomRightSlice.onClick();
-                    }
-                }
-            } else {
-                stopButtonBlink();
+    protected void onTouchInsideSlice() {
+        super.onTouchInsideSlice();
+        if (touchX > 0 && touchY > 0){
+            indexButton = BTN_NE;
+            startButtonBlink();
+            if (onClickTopRightSlice != null){
+                onClickTopRightSlice.onClick();
             }
         }
-        return true;
-        //return super.onTouchEvent(event);
+        if (touchX < 0 && touchY > 0){
+            indexButton = BTN_NW;
+            startButtonBlink();
+            if (onClickTopLeftSlice != null){
+                onClickTopLeftSlice.onClick();
+            }
+        }
+        if (touchX < 0 && touchY < 0){
+            indexButton = BTN_SW;
+            startButtonBlink();
+            if (onClickBottomLeftSlice != null) {
+                onClickBottomLeftSlice.onClick();
+            }
+        }
+        if (touchX > 0 && touchY < 0){
+            indexButton = BTN_SE;
+            startButtonBlink();
+            if (onClickBottomRightSlice != null) {
+                onClickBottomRightSlice.onClick();
+            }
+        }
     }
+
 
 
 

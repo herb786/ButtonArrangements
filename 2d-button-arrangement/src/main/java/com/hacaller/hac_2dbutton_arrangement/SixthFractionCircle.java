@@ -14,23 +14,22 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 /**
- * Created by herbert on 31/05/2017.
+ * Created by AGB on 31/05/2017.
  */
 
-public class FifthFractionCircle extends BaseShapeView {
+public class SixthFractionCircle extends BaseShapeView {
 
-    public FifthFractionCircle(Context context) {
+    public SixthFractionCircle(Context context) {
         super(context);
     }
 
-    public FifthFractionCircle(Context context, @Nullable AttributeSet attrs) {
+    public SixthFractionCircle(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FifthFractionCircle(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SixthFractionCircle(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -46,13 +45,12 @@ public class FifthFractionCircle extends BaseShapeView {
                         Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
                         Canvas.CLIP_TO_LAYER_SAVE_FLAG);
         innerRadius = 0.5f*outterRadius;
-        // Source image (src)
         drawTopLeftButton(canvas, paint);
         drawTopRightButton(canvas, paint);
+        drawLeftButton(canvas, paint);
+        drawRightButton(canvas, paint);
         drawBottomLeftButton(canvas, paint);
         drawBottomRightButton(canvas, paint);
-        drawBottom(canvas, paint);
-        // Destination image (dst)
         booleanDiffence(canvas, paint);
         canvas.restoreToCount(sc);
     }
@@ -62,75 +60,79 @@ public class FifthFractionCircle extends BaseShapeView {
         pathSrc.moveTo(outterRadius, outterRadius);
         pathSrc.lineTo(outterRadius, 0f);
         RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, -90f, -72f);
+        pathSrc.arcTo(rectF, -90f, -60f);
         pathSrc.close();
         Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_NW], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
+
 
     private void drawTopRightButton(Canvas canvas, Paint paint) {
         pathSrc = new Path();
         pathSrc.moveTo(outterRadius, outterRadius);
         pathSrc.lineTo(outterRadius, 0f);
         RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, -90f, 72f);
+        pathSrc.arcTo(rectF, -90f, 60f);
         pathSrc.close();
         Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_NE], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
 
-
-    private void drawBottomRightButton(Canvas canvas, Paint paint) {
+    private void drawLeftButton(Canvas canvas, Paint paint) {
         pathSrc = new Path();
         pathSrc.moveTo(0f, 0f);
         pathSrc.lineTo(outterRadius, 0f);
         Matrix rmatrix = new Matrix();
-        rmatrix.setRotate(-18f);
+        rmatrix.setRotate(-30f);
         pathSrc.transform(rmatrix);
         Matrix tmatrix = new Matrix();
         tmatrix.setTranslate(outterRadius,outterRadius);
         pathSrc.transform(tmatrix);
         RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, -18f, 72f);
+        pathSrc.arcTo(rectF, -30f, 60f);
         pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_SE], 2*superRadius);
+        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_WW], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
 
-    private void drawBottom(Canvas canvas, Paint paint) {
+    private void drawRightButton(Canvas canvas, Paint paint) {
         pathSrc = new Path();
         pathSrc.moveTo(0f, 0f);
         pathSrc.lineTo(outterRadius, 0f);
         Matrix rmatrix = new Matrix();
-        rmatrix.setRotate(54f);
+        rmatrix.setRotate(150f);
         pathSrc.transform(rmatrix);
         Matrix tmatrix = new Matrix();
         tmatrix.setTranslate(outterRadius,outterRadius);
         pathSrc.transform(tmatrix);
         RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, 54f, 72f);
+        pathSrc.arcTo(rectF, 150f, 60f);
         pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_SS], 2*superRadius);
+        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_EE], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
 
     private void drawBottomLeftButton(Canvas canvas, Paint paint) {
         pathSrc = new Path();
-        pathSrc.moveTo(0f, 0f);
+        pathSrc.moveTo(outterRadius, outterRadius);
         pathSrc.lineTo(outterRadius, 0f);
-        Matrix rmatrix = new Matrix();
-        rmatrix.setRotate(126f);
-        pathSrc.transform(rmatrix);
-        Matrix tmatrix = new Matrix();
-        tmatrix.setTranslate(outterRadius,outterRadius);
-        pathSrc.transform(tmatrix);
         RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, 126f, 72f);
+        pathSrc.arcTo(rectF, 90f, 60f);
         pathSrc.close();
         Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_SW], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
 
+    private void drawBottomRightButton(Canvas canvas, Paint paint) {
+        pathSrc = new Path();
+        pathSrc.moveTo(outterRadius, outterRadius);
+        pathSrc.lineTo(outterRadius, 0f);
+        RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
+        pathSrc.arcTo(rectF, 90f, -60f);
+        pathSrc.close();
+        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_SE], 2*superRadius);
+        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    }
 
     private void booleanDiffence(Canvas canvas, Paint paint) {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
@@ -138,20 +140,19 @@ public class FifthFractionCircle extends BaseShapeView {
         Bitmap bmDst = makeCircleDst(defColors[3], (int) (2*innerRadius));
         canvas.drawBitmap(bmDst, dx1, dx1, paint);
         paint.setXfermode(null);
-
     }
 
     @Override
     protected void onTouchInsideSlice() {
         super.onTouchInsideSlice();
-        if (touchX > 0 && touchY > Math.tan(18f*Math.PI/180f)*touchX){
+        if (touchX > 0 && touchY > Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NE;
             startButtonBlink();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
-        if (touchX < 0 && touchY > -Math.tan(18f*Math.PI/180f)*touchX){
+        if (touchX < 0 && touchY > -Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NW;
             startButtonBlink();
             if (onClickTopLeftSlice != null){
@@ -159,27 +160,33 @@ public class FifthFractionCircle extends BaseShapeView {
             }
         }
 
-        if (touchX < 0 && touchY < -Math.tan(18f*Math.PI/180f)*touchX
-                && touchY > Math.tan(54f*Math.PI/180f)*touchX ){
+        if (touchX > 0 && touchY < -Math.tan(30f*Math.PI/180f)*touchX){
+            indexButton = BTN_SE;
+            startButtonBlink();
+            if (onClickTopRightSlice != null){
+                onClickTopRightSlice.onClick();
+            }
+        }
+        if (touchX < 0 && touchY < Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_SW;
+            startButtonBlink();
+            if (onClickTopLeftSlice != null){
+                onClickTopLeftSlice.onClick();
+            }
+        }
+
+        if (touchX > 0 && touchY < Math.tan(30f*Math.PI/180f)*touchX
+                && touchY > -Math.tan(30f*Math.PI/180f)*touchX ){
+            indexButton = BTN_WW;
             startButtonBlink();
             if (onClickBottomLeftSlice != null) {
                 onClickBottomLeftSlice.onClick();
             }
         }
 
-        if (touchX > 0 && touchY < Math.tan(18f*Math.PI/180f)*touchX
-                && touchY > -Math.tan(54f*Math.PI/180f)*touchX ){
-            indexButton = BTN_SE;
-            startButtonBlink();
-            if (onClickBottomRightSlice != null) {
-                onClickBottomRightSlice.onClick();
-            }
-        }
-
-        if (touchY < 0 && touchX < -Math.tan(36f*Math.PI/180f)*touchY
-                && touchX > Math.tan(36f*Math.PI/180f)*touchY) {
-            indexButton = BTN_SS;
+        if (touchX < 0 && touchY < -Math.tan(30f*Math.PI/180f)*touchX
+                && touchY > Math.tan(30f*Math.PI/180f)*touchX ){
+            indexButton = BTN_EE;
             startButtonBlink();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();

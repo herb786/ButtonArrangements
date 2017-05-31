@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Arrays;
@@ -22,6 +24,14 @@ import java.util.TimerTask;
  */
 
 public class BaseShapeView extends View {
+
+    public interface OnClickLeftSlice{
+        void onClick();
+    }
+
+    public interface OnClickRightSlice{
+        void onClick();
+    }
 
     public interface OnClickTopSlice{
         void onClick();
@@ -47,19 +57,33 @@ public class BaseShapeView extends View {
         void onClick();
     };
 
+    protected static final int BTN_NN = 0;
+    protected static final int BTN_NE = 1;
+    protected static final int BTN_EE = 2;
+    protected static final int BTN_SE = 3;
+    protected static final int BTN_SS = 4;
+    protected static final int BTN_SW = 5;
+    protected static final int BTN_WW = 6;
+    protected static final int BTN_NW = 7;
+
     protected OnClickTopSlice onClickTopSlice;
     protected OnClickBottomSlice onClikBottomSlice;
+    protected OnClickLeftSlice onClickLeftSlice;
+    protected OnClickRightSlice onClickRightSlice;
     protected OnClickTopRightSlice onClickTopRightSlice;
     protected OnClickTopLeftSlice onClickTopLeftSlice;
     protected OnClickBottomLeftSlice onClickBottomLeftSlice;
     protected OnClickBottomRightSlice onClickBottomRightSlice;
 
+    protected float touchX, touchY;
+
     protected int superRadius = 120;
     protected float outterRadius = 120f;
     protected float innerRadius = 0f;
-    protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA};
+    protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.DKGRAY,
+            Color.YELLOW, Color.MAGENTA, Color.LTGRAY, Color.CYAN};
     protected int[] defColors = initColors.clone();
-    protected String[] textButton = new String[]{"A", "B", "C", "D", "E"};
+    protected String[] textButton = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
     protected Path pathSrc, pathDst;
     protected RectF rectSrc, rectDst;
     protected int indexButton = -1;
@@ -155,7 +179,7 @@ public class BaseShapeView extends View {
         // hue, saturation, value
         float[] hsv = new float[3];
         Color.colorToHSV(rgb, hsv);
-        hsv[2] *= .9f;
+        hsv[2] *= .8f;
         return Color.HSVToColor(hsv);
     }
 
@@ -245,6 +269,35 @@ public class BaseShapeView extends View {
         this.onClickBottomRightSlice = onClickBottomRightSlice;
     }
 
+    public void setOnClickLeftSlice(OnClickLeftSlice onClickLeftSlice) {
+        this.onClickLeftSlice = onClickLeftSlice;
+    }
+
+    public void setOnClickRightSlice(OnClickRightSlice onClickRightSlice) {
+        this.onClickRightSlice = onClickRightSlice;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            touchX = event.getX()-superRadius;
+            touchY = superRadius - event.getY();
+            Log.d("Coordinates", String.format("x: %f, y: %f", touchX ,touchY));
+            boolean inside = (touchX*touchX + touchY*touchY < outterRadius*outterRadius)
+                    && (touchX*touchX + touchY*touchY > innerRadius*innerRadius);
+            if ( inside ) {
+                onTouchInsideSlice();
+            } else {
+                stopButtonBlink();
+            }
+        }
+        return true;
+        //return super.onTouchEvent(event);
+    }
+
+    protected void onTouchInsideSlice(){
+
+    }
 
 
 }

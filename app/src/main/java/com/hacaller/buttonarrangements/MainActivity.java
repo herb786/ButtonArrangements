@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hacaller.hac_2dbutton_arrangement.FourthFractionCircle;
+import com.hacaller.hac_2dbutton_arrangement.SixthFractionCircle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         Button threeBtn = (Button) findViewById(R.id.three_slices);
         Button fourBtn = (Button) findViewById(R.id.four_slices);
         Button fiveBtn = (Button) findViewById(R.id.five_slices);
+        Button twoBtn = (Button) findViewById(R.id.two_slices);
+        Button sixBtn = (Button) findViewById(R.id.six_slices);
 
         threeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, FifthFractionCircleActivity.class));
+            }
+        });
+
+        twoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, HalfFractionCircleActivity.class));
+            }
+        });
+
+        sixBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SixthFractionCircleActivity.class));
             }
         });
 
