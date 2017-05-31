@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ThirdFractionCircleActivity" />
+        <activity android:name=".FourthFractionCircleActivity" />
+        <activity android:name=".FifthFractionCircleActivity"></activity>
     </application>
 
 </manifest>

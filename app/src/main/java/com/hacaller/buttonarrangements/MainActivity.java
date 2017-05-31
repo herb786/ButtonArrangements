@@ -1,5 +1,6 @@
 package com.hacaller.buttonarrangements;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +15,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FourthFractionCircle view = (FourthFractionCircle) findViewById(R.id.test01);
+        Button threeBtn = (Button) findViewById(R.id.three_slices);
+        Button fourBtn = (Button) findViewById(R.id.four_slices);
+        Button fiveBtn = (Button) findViewById(R.id.five_slices);
 
+        threeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ThirdFractionCircleActivity.class));
+            }
+        });
+
+        fourBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FourthFractionCircleActivity.class));
+            }
+        });
+
+        fiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FifthFractionCircleActivity.class));
+            }
+        });
 
     }
 }
