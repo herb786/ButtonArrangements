@@ -16,6 +16,7 @@ import android.media.effect.Effect;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * Created by AGB on 31/05/2017.
@@ -38,6 +39,7 @@ public class HalfFractionCircle extends BaseShapeView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.d("Current time -->", String.valueOf(System.currentTimeMillis()));
         canvas.drawColor(Color.TRANSPARENT);
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -55,6 +57,7 @@ public class HalfFractionCircle extends BaseShapeView {
         booleanDiffence(canvas, paint);
         paintSliceText(canvas, paint);
         canvas.restoreToCount(sc);
+        doBlinkingAnimation();
     }
 
     private void drawLeftButton(Canvas canvas, Paint paint) {
@@ -109,14 +112,14 @@ public class HalfFractionCircle extends BaseShapeView {
         super.onTouchInsideSlice();
         if (touchX > 0){
             indexButton = BTN_EE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 ){
             indexButton = BTN_WW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }

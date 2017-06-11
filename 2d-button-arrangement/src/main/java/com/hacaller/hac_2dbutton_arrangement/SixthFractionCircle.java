@@ -53,6 +53,7 @@ public class SixthFractionCircle extends BaseShapeView {
         drawBottomRightButton(canvas, paint);
         booleanDiffence(canvas, paint);
         canvas.restoreToCount(sc);
+        doBlinkingAnimation();
     }
 
     private void drawTopLeftButton(Canvas canvas, Paint paint) {
@@ -147,14 +148,14 @@ public class SixthFractionCircle extends BaseShapeView {
         super.onTouchInsideSlice();
         if (touchX > 0 && touchY > Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 && touchY > -Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }
@@ -162,14 +163,14 @@ public class SixthFractionCircle extends BaseShapeView {
 
         if (touchX > 0 && touchY < -Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_SE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 && touchY < Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_SW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }
@@ -178,7 +179,7 @@ public class SixthFractionCircle extends BaseShapeView {
         if (touchX > 0 && touchY < Math.tan(30f*Math.PI/180f)*touchX
                 && touchY > -Math.tan(30f*Math.PI/180f)*touchX ){
             indexButton = BTN_WW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomLeftSlice != null) {
                 onClickBottomLeftSlice.onClick();
             }
@@ -187,7 +188,7 @@ public class SixthFractionCircle extends BaseShapeView {
         if (touchX < 0 && touchY < -Math.tan(30f*Math.PI/180f)*touchX
                 && touchY > Math.tan(30f*Math.PI/180f)*touchX ){
             indexButton = BTN_EE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();
             }

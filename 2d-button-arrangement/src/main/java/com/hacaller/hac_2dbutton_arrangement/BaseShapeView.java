@@ -57,6 +57,7 @@ public class BaseShapeView extends View {
         void onClick();
     };
 
+    protected boolean isAnimationOn = false;
     protected static final int BTN_NN = 0;
     protected static final int BTN_NE = 1;
     protected static final int BTN_EE = 2;
@@ -77,6 +78,8 @@ public class BaseShapeView extends View {
 
     protected float touchX, touchY;
 
+    protected long originTime = System.currentTimeMillis();
+    protected long elapsedTime;
     protected int superRadius = 120;
     protected float outterRadius = 120f;
     protected float innerRadius = 0f;
@@ -88,7 +91,7 @@ public class BaseShapeView extends View {
     protected RectF rectSrc, rectDst;
     protected int indexButton = -1;
 
-    Timer highTimer, lowTimer;
+    //Timer highTimer, lowTimer;
 
     public BaseShapeView(Context context) {
         super(context);
@@ -184,6 +187,7 @@ public class BaseShapeView extends View {
     }
 
     protected void startButtonBlink(){
+        /*
         if (highTimer != null){
             highTimer.cancel();
             highTimer.purge();
@@ -200,9 +204,42 @@ public class BaseShapeView extends View {
             highTimer.scheduleAtFixedRate(new ButtonHighTask(),500, 500);
             lowTimer.scheduleAtFixedRate(new ButtonLowTask(),250, 500);
         }
+        */
     }
 
+    protected void startBlinkingAnimation(){
+        isAnimationOn = true;
+        Log.d("Animation on -->", String.valueOf(isAnimationOn));
+        doBlinkingAnimation();
+    }
+
+    protected void doBlinkingAnimation(){
+        if (isAnimationOn) {
+            elapsedTime = System.currentTimeMillis() - originTime;
+            Log.d("elapsed time -->", String.valueOf(elapsedTime));
+            if (elapsedTime > 0){
+                long seconds = elapsedTime / 1000L;
+                if ( seconds % 2 == 0){
+                    defColors = Arrays.copyOf(initColors, initColors.length);
+                    defColors[indexButton] = lightenColour(initColors[indexButton]);
+                } else {
+                    defColors = initColors.clone();
+                }
+                invalidate();
+            }
+        }
+    }
+
+    protected void stopBlinkingAnimation(){
+        isAnimationOn = false;
+        defColors = initColors.clone();
+        invalidate();
+        Log.d("Animation on -->", String.valueOf(isAnimationOn));
+    }
+
+
     protected void stopButtonBlink(){
+        /*
         if (highTimer != null){
             highTimer.cancel();
             highTimer.purge();
@@ -215,6 +252,7 @@ public class BaseShapeView extends View {
         }
         defColors = initColors.clone();
         invalidate();
+        */
     }
 
 
@@ -288,7 +326,8 @@ public class BaseShapeView extends View {
             if ( inside ) {
                 onTouchInsideSlice();
             } else {
-                stopButtonBlink();
+                stopBlinkingAnimation();
+                //stopButtonBlink();
             }
         }
         return true;
@@ -296,7 +335,7 @@ public class BaseShapeView extends View {
     }
 
     protected void onTouchInsideSlice(){
-
+        Log.d("Animation on -->", String.valueOf(isAnimationOn));
     }
 
 

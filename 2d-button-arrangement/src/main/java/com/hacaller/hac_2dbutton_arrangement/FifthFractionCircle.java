@@ -55,6 +55,7 @@ public class FifthFractionCircle extends BaseShapeView {
         // Destination image (dst)
         booleanDiffence(canvas, paint);
         canvas.restoreToCount(sc);
+        doBlinkingAnimation();
     }
 
     private void drawTopLeftButton(Canvas canvas, Paint paint) {
@@ -146,14 +147,14 @@ public class FifthFractionCircle extends BaseShapeView {
         super.onTouchInsideSlice();
         if (touchX > 0 && touchY > Math.tan(18f*Math.PI/180f)*touchX){
             indexButton = BTN_NE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 && touchY > -Math.tan(18f*Math.PI/180f)*touchX){
             indexButton = BTN_NW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }
@@ -162,7 +163,7 @@ public class FifthFractionCircle extends BaseShapeView {
         if (touchX < 0 && touchY < -Math.tan(18f*Math.PI/180f)*touchX
                 && touchY > Math.tan(54f*Math.PI/180f)*touchX ){
             indexButton = BTN_SW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomLeftSlice != null) {
                 onClickBottomLeftSlice.onClick();
             }
@@ -171,7 +172,7 @@ public class FifthFractionCircle extends BaseShapeView {
         if (touchX > 0 && touchY < Math.tan(18f*Math.PI/180f)*touchX
                 && touchY > -Math.tan(54f*Math.PI/180f)*touchX ){
             indexButton = BTN_SE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();
             }
@@ -180,7 +181,7 @@ public class FifthFractionCircle extends BaseShapeView {
         if (touchY < 0 && touchX < -Math.tan(36f*Math.PI/180f)*touchY
                 && touchX > Math.tan(36f*Math.PI/180f)*touchY) {
             indexButton = BTN_SS;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();
             }

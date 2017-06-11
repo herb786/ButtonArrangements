@@ -61,6 +61,7 @@ public class FourthFractionCircle extends BaseShapeView {
         drawBottomRightButton(canvas, paint);
         drawBottomLeftButton(canvas, paint);
         canvas.restoreToCount(sc);
+        doBlinkingAnimation();
     }
 
 
@@ -175,28 +176,28 @@ public class FourthFractionCircle extends BaseShapeView {
         super.onTouchInsideSlice();
         if (touchX > 0 && touchY > 0){
             indexButton = BTN_NE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 && touchY > 0){
             indexButton = BTN_NW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }
         }
         if (touchX < 0 && touchY < 0){
             indexButton = BTN_SW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomLeftSlice != null) {
                 onClickBottomLeftSlice.onClick();
             }
         }
         if (touchX > 0 && touchY < 0){
             indexButton = BTN_SE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();
             }

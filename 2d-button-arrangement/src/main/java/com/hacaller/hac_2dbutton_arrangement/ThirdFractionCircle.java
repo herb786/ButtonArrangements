@@ -55,6 +55,7 @@ public class ThirdFractionCircle extends BaseShapeView {
         // Destination image (dst)
         booleanDiffence(canvas, paint);
         canvas.restoreToCount(sc);
+        doBlinkingAnimation();
     }
 
     private void drawTopLeftButton(Canvas canvas, Paint paint) {
@@ -111,28 +112,28 @@ public class ThirdFractionCircle extends BaseShapeView {
         super.onTouchInsideSlice();
         if (touchX > 0 && touchY > -Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NE;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopRightSlice != null){
                 onClickTopRightSlice.onClick();
             }
         }
         if (touchX < 0 && touchY > Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_NW;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickTopLeftSlice != null){
                 onClickTopLeftSlice.onClick();
             }
         }
         if (touchX < 0 && touchY < -Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_SS;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomLeftSlice != null) {
                 onClickBottomLeftSlice.onClick();
             }
         }
         if (touchX > 0 && touchY < Math.tan(30f*Math.PI/180f)*touchX){
             indexButton = BTN_SS;
-            startButtonBlink();
+            startBlinkingAnimation();
             if (onClickBottomRightSlice != null) {
                 onClickBottomRightSlice.onClick();
             }
