@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         Button fiveBtn = (Button) findViewById(R.id.five_slices);
         Button twoBtn = (Button) findViewById(R.id.two_slices);
         Button sixBtn = (Button) findViewById(R.id.six_slices);
+        Button checkerBtn = (Button) findViewById(R.id.checker);
+        Button measureBtn = (Button) findViewById(R.id.measures);
 
         threeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SixthFractionCircleActivity.class));
+            }
+        });
+
+        checkerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FiveBoxCheckerActivity.class));
+            }
+        });
+
+        measureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ScrollingActivity.class));
             }
         });
 

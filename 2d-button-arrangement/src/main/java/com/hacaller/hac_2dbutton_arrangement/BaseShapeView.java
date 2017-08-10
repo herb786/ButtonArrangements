@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
@@ -57,6 +58,18 @@ public class BaseShapeView extends View {
         void onClick();
     };
 
+    public interface OnClickMiddleBrick{
+        void onClick();
+    }
+
+    public interface OnClickRightmostButton{
+        void onClick();
+    }
+
+    public interface OnClickLeftmostButton{
+        void onClick();
+    }
+
     protected boolean isAnimationOn = false;
     protected static final int BTN_NN = 0;
     protected static final int BTN_NE = 1;
@@ -75,12 +88,17 @@ public class BaseShapeView extends View {
     protected OnClickTopLeftSlice onClickTopLeftSlice;
     protected OnClickBottomLeftSlice onClickBottomLeftSlice;
     protected OnClickBottomRightSlice onClickBottomRightSlice;
+    protected OnClickMiddleBrick onClickMiddleBrick;
+    protected OnClickLeftmostButton onClickLeftmostButton;
+    protected OnClickRightmostButton onClickRightmostButton;
 
     protected float touchX, touchY;
 
     protected long originTime = System.currentTimeMillis();
     protected long elapsedTime;
     protected int superRadius = 120;
+    protected int canvasLong;
+    protected int canvasBroad;
     protected float outterRadius = 120f;
     protected float innerRadius = 0f;
     protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.DKGRAY,
@@ -108,43 +126,20 @@ public class BaseShapeView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width, height;
+        // Set size to 360dp
+        //int size = Math.round(360f * getResources().getDisplayMetrics().density);
+        //setMeasuredDimension(size, size);
 
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        int desiredWidth = getMeasuredWidth();
+        int size = Math.round(240f * getResources().getDisplayMetrics().density);
+        int desiredWidth = getMeasuredWidth() != 0 ? getMeasuredWidth() : size;
         int desiredHeight = desiredWidth;
 
+        canvasBroad = resolveSize(desiredWidth, widthMeasureSpec);
+        canvasLong = resolveSize(desiredHeight, heightMeasureSpec);
 
-        //Measure Width
-        if (widthMode == MeasureSpec.EXACTLY) {
-            //Must be this size
-            width = widthSize;
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            //Can't be bigger than...
-            width = Math.min(desiredWidth, widthSize);
-        } else {
-            //Be whatever you want
-            width = desiredWidth;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
-            //Must be this size
-            height = heightSize;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            //Can't be bigger than...
-            height = Math.min(desiredHeight, heightSize);
-        } else {
-            //Be whatever you want
-            height = desiredHeight;
-        }
-
-        superRadius = width/2;
+        superRadius = canvasBroad/2;
         outterRadius = 1f*superRadius;
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(canvasBroad, canvasLong);
     }
 
     protected Bitmap makeDst(Path path, int color, int size){
@@ -173,9 +168,16 @@ public class BaseShapeView extends View {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(color);
         c.drawPath(path, p);
-
         return bm;
+    }
 
+    protected Bitmap makeRect(RectF rectF, int color, int size){
+        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(color);
+        c.drawRect(rectF, p);
+        return bm;
     }
 
     protected int lightenColour(int rgb){
@@ -209,14 +211,14 @@ public class BaseShapeView extends View {
 
     protected void startBlinkingAnimation(){
         isAnimationOn = true;
-        Log.d("Animation on -->", String.valueOf(isAnimationOn));
+        //Log.d("Animation on -->", String.valueOf(isAnimationOn));
         doBlinkingAnimation();
     }
 
     protected void doBlinkingAnimation(){
         if (isAnimationOn) {
             elapsedTime = System.currentTimeMillis() - originTime;
-            Log.d("elapsed time -->", String.valueOf(elapsedTime));
+            //Log.d("elapsed time -->", String.valueOf(elapsedTime));
             if (elapsedTime > 0){
                 long seconds = elapsedTime / 1000L;
                 if ( seconds % 2 == 0){
@@ -234,7 +236,7 @@ public class BaseShapeView extends View {
         isAnimationOn = false;
         defColors = initColors.clone();
         invalidate();
-        Log.d("Animation on -->", String.valueOf(isAnimationOn));
+        //Log.d("Animation on -->", String.valueOf(isAnimationOn));
     }
 
 
@@ -315,6 +317,22 @@ public class BaseShapeView extends View {
         this.onClickRightSlice = onClickRightSlice;
     }
 
+    public void setOnClikBottomSlice(OnClickBottomSlice onClikBottomSlice) {
+        this.onClikBottomSlice = onClikBottomSlice;
+    }
+
+    public void setOnClickMiddleBrick(OnClickMiddleBrick onClickMiddleBrick) {
+        this.onClickMiddleBrick = onClickMiddleBrick;
+    }
+
+    public void setOnClickLeftmostButton(OnClickLeftmostButton onClickLeftmostButton) {
+        this.onClickLeftmostButton = onClickLeftmostButton;
+    }
+
+    public void setOnClickRightmostButton(OnClickRightmostButton onClickRightmostButton) {
+        this.onClickRightmostButton = onClickRightmostButton;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -335,8 +353,30 @@ public class BaseShapeView extends View {
     }
 
     protected void onTouchInsideSlice(){
-        Log.d("Animation on -->", String.valueOf(isAnimationOn));
+        //Log.d("Animation on -->", String.valueOf(isAnimationOn));
     }
+
+    private Runnable updateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateBaseShapeView();
+        }
+    };
+
+    public void updateBaseShapeView(){
+        invalidate();
+        postDelayed(updateRunnable, 200L);
+    }
+
+    public void stopBaseShapeViewUpdate(){
+        removeCallbacks(updateRunnable);
+    }
+
+    public void startBaseShapeViewUpdate(){
+        updateBaseShapeView();
+    }
+
+
 
 
 }

@@ -20,7 +20,12 @@
         <activity android:name=".FourthFractionCircleActivity" />
         <activity android:name=".FifthFractionCircleActivity" />
         <activity android:name=".HalfFractionCircleActivity" />
-        <activity android:name=".SixthFractionCircleActivity"></activity>
+        <activity android:name=".SixthFractionCircleActivity" />
+        <activity android:name=".FiveBoxCheckerActivity" />
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
