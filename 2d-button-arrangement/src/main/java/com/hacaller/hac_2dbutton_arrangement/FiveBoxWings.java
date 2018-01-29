@@ -46,11 +46,7 @@ public class FiveBoxWings extends BaseShapeView {
         paint.setFilterBitmap(false);
         canvas.drawRect(0, 0, getWidth(), getWidth(), paint);
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
-                Canvas.MATRIX_SAVE_FLAG |
-                        Canvas.CLIP_SAVE_FLAG |
-                        Canvas.HAS_ALPHA_LAYER_SAVE_FLAG |
-                        Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
-                        Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+                Canvas.ALL_SAVE_FLAG);
 
         drawLeftmostButton(canvas, paint);
         drawRightmostButton(canvas, paint);
