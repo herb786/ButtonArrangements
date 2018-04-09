@@ -57,22 +57,20 @@ public class HalfFractionCircle extends BaseShapeView {
     }
 
     private void drawLeftButton(Canvas canvas, Paint paint) {
+        clearCoords();
         pathSrc = new Path();
-        pathSrc.moveTo(outterRadius, outterRadius);
-        pathSrc.lineTo(outterRadius, 0f);
-        RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, -90f, -180f);
+        pathSrc = drawSvgPath("M 256.52917,511.72354", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 115.38799,511.72354 -5.7202626,397.90001 0.0467967,256.75881 -5.7202626,117.13527 114.24974,0.69379 255.39093,0.27644", pathSrc, 1f);
         pathSrc.close();
         Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_WW], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);
     }
 
     private void drawRightButton(Canvas canvas, Paint paint) {
+        clearCoords();
         pathSrc = new Path();
-        pathSrc.moveTo(outterRadius, outterRadius);
-        pathSrc.lineTo(outterRadius, 0f);
-        RectF rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathSrc.arcTo(rectF, -90f, 180f);
+        pathSrc = drawSvgPath("M 255.47083,0.27647", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 396.612,0.27647 517.72026,114.1 511.9532,255.24119 517.72026,394.86473 397.75025,511.30622 256.60907,511.72357", pathSrc, 1f);
         pathSrc.close();
         Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_EE], 2*superRadius);
         canvas.drawBitmap(bmSrc, 0, 0, paint);

@@ -305,7 +305,7 @@ public class FancyFifthFractionCircle extends BaseShapeView {
         return Color.HSVToColor(hsv);
     }
 
-    @Override
+
     public Path drawSvgPath(String pathString, Path path){
         if (pathString.charAt(0) == 'M'){
             pathString = pathString.replace("M","").trim();

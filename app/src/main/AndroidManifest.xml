@@ -22,7 +22,13 @@
         <activity android:name=".ThirdFractionCircleActivity" />
         <activity android:name=".FourthFractionCircleActivity" />
         <activity android:name=".FifthFractionCircleActivity" />
-        <activity android:name=".HalfFractionCircleActivity" />
+        <activity android:name=".HalfFractionCircleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".SixthFractionCircleActivity" />
         <activity android:name=".FiveBoxCheckerActivity" />
         <activity
@@ -33,12 +39,6 @@
 
         </activity>
         <activity android:name=".FancyThirdFractionCircleActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

@@ -108,6 +108,7 @@ public class BaseShapeView extends View {
     protected String[] textButton = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
     protected Path pathSrc, pathDst;
     protected RectF rectSrc, rectDst;
+    protected float lastX, lastY;
     protected int indexButton = -1;
 
 
@@ -383,53 +384,115 @@ public class BaseShapeView extends View {
         return 2f*Float.parseFloat(coord)*outterRadius/sourceSize;
     }
 
-
-    public Path drawSvgPath(String pathString, Path path){
-        if (pathString.charAt(0) == 'M'){
-            pathString = pathString.replace("M","").trim();
-            String[] c = pathString.split(",");
-            path.moveTo(getCoord((c[0])),
-                    getCoord((c[1])));
-        } else if (pathString.charAt(0) == 'C'){
-            pathString = pathString.replace("C","").trim();
+    public Path drawSvgPath(String pathString, Path path, float scale) {
+        if (pathString.charAt(0) == 'M') {
+            pathString = pathString.replace("M", "").trim();
             String[] c = pathString.split(" ");
-            String[] d1 = c[0].split(",");
-            String[] d2 = c[1].split(",");
-            String[] d3 = c[2].split(",");
-            path.cubicTo(getCoord(d1[0]),getCoord(d1[1]),
-                    getCoord(d2[0]),getCoord(d2[1]),
-                    getCoord(d3[0]),getCoord(d3[1]));
-        } else if (pathString.charAt(0) == 'L'){
-            pathString = pathString.replace("L","").trim();
-            String[] c = pathString.split(",");
-            path.lineTo(getCoord((c[0])),
-                    getCoord((c[1])));
-        } else if (pathString.charAt(0) == 'm'){
-            pathString = pathString.replace("m","").trim();
-            String[] c = pathString.split(",");
-            path.rMoveTo(getCoord((c[0])),
-                    getCoord((c[1])));
-        } else if (pathString.charAt(0) == 'c'){
-            pathString = pathString.replace("c","").trim();
-            String[] c = pathString.split(" ");
-            for (int i = 0; i<c.length; i=i+3){
-                String[] d1 = c[i].split(",");
-                String[] d2 = c[i+1].split(",");
-                String[] d3 = c[i+2].split(",");
-                path.rCubicTo(getCoord(d1[0]),getCoord(d1[1]),
-                        getCoord(d2[0]),getCoord(d2[1]),
-                        getCoord(d3[0]),getCoord(d3[1]));
+            String[] d = c[0].split(",");
+            lastX = getCoord(d[0], scale);
+            lastY = getCoord(d[1], scale);
+            path.moveTo(lastX, lastY);
+            if (c.length>1){
+                for (int i = 1; i < c.length; i++) {
+                    String[] d1 = c[i].split(",");
+                    lastX = getCoord(d1[0], scale);
+                    lastY = getCoord(d1[1], scale);
+                    path.lineTo(lastX, lastY);
+                }
             }
-        } else if (pathString.charAt(0) == 'l'){
-            pathString = pathString.replace("l","").trim();
-            String[] c = pathString.split(",");
-            path.rLineTo(getCoord((c[0])),
-                    getCoord((c[1])));
+
+        } else if (pathString.charAt(0) == 'C') {
+            pathString = pathString.replace("C", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i = i + 3) {
+                String[] d1 = c[i].split(",");
+                String[] d2 = c[i + 1].split(",");
+                String[] d3 = c[i + 2].split(",");
+                lastX = getCoord(d1[0], scale);
+                lastY = getCoord(d1[1], scale);
+                path.cubicTo(lastX, lastY,
+                        getCoord(d2[0], scale), getCoord(d2[1], scale),
+                        getCoord(d3[0], scale), getCoord(d3[1], scale));
+            }
+        } else if (pathString.charAt(0) == 'L') {
+            pathString = pathString.replace("L", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i++) {
+                String[] d1 = c[i].split(",");
+                lastX = getCoord(d1[0], scale);
+                lastY = getCoord(d1[1], scale);
+                path.lineTo(lastX, lastY);
+            }
+        } else if (pathString.charAt(0) == 'm') {
+            pathString = pathString.replace("m", "").trim();
+            String[] c = pathString.split(" ");
+            String[] d = c[0].split(",");
+            path.rMoveTo(getCoord(d[0], scale),
+                    getCoord(d[1], scale));
+            if (c.length>1){
+                for (int i = 1; i < c.length; i++) {
+                    String[] d1 = c[i].split(",");
+                    path.rLineTo(getCoord(d1[0], scale), getCoord(d1[1], scale));
+                }
+            }
+        } else if (pathString.charAt(0) == 'c') {
+            pathString = pathString.replace("c", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i = i + 3) {
+                String[] d1 = c[i].split(",");
+                String[] d2 = c[i + 1].split(",");
+                String[] d3 = c[i + 2].split(",");
+                path.rCubicTo(getCoord(d1[0], scale), getCoord(d1[1], scale),
+                        getCoord(d2[0], scale), getCoord(d2[1], scale),
+                        getCoord(d3[0], scale), getCoord(d3[1], scale));
+            }
+        } else if (pathString.charAt(0) == 'l') {
+            pathString = pathString.replace("l", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i++) {
+                String[] d1 = c[i].split(",");
+                path.rLineTo(getCoord(d1[0], scale), getCoord(d1[1], scale));
+            }
+        } else if (pathString.charAt(0) == 'q') {
+            pathString = pathString.replace("q", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i = i + 2) {
+                String[] d1 = c[i].split(",");
+                String[] d2 = c[i + 1].split(",");
+                path.rQuadTo(getCoord(d1[0], scale), getCoord(d1[1], scale),
+                        getCoord(d2[0], scale), getCoord(d2[1], scale));
+            }
+        } else if (pathString.charAt(0) == 'Q') {
+            pathString = pathString.replace("Q", "").trim();
+            String[] c = pathString.split(" ");
+            for (int i = 0; i < c.length; i = i + 2) {
+                String[] d1 = c[i].split(",");
+                String[] d2 = c[i + 1].split(",");
+                lastX = getCoord(d1[0], scale);
+                lastY = getCoord(d1[1], scale);
+                path.quadTo(lastX, lastY,
+                        getCoord(d2[0], scale), getCoord(d2[1], scale));
+            }
+        } else if (pathString.charAt(0) == 'H') {
+            pathString = pathString.replace("H", "").trim();
+            lastX = getCoord(pathString, scale);
+            path.lineTo(lastX, lastY);
+        } else if (pathString.charAt(0) == 'V') {
+            pathString = pathString.replace("V", "").trim();
+            lastY = getCoord(pathString, scale);
+            path.lineTo(lastX, lastY);
         }
         return path;
     }
 
 
+    public float getCoord(String coord, float scale) {
+        return scale * Float.parseFloat(coord) * canvasBroad / sourceSize;
+    }
 
+    public void clearCoords(){
+        lastX = 0f;
+        lastY = 0f;
+    }
 
 }
