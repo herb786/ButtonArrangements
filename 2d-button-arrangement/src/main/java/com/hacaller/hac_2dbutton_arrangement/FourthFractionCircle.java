@@ -44,163 +44,103 @@ public class FourthFractionCircle extends BaseShapeView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.TRANSPARENT);
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setFilterBitmap(false);
-        canvas.drawRect(0, 0, getWidth(), getWidth(), paint);
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
                         Canvas.ALL_SAVE_FLAG);
         innerRadius = 0.5f*outterRadius;
-        drawTopLeftButton(canvas, paint);
-        drawTopRightButton(canvas, paint);
-        drawBottomRightButton(canvas, paint);
-        drawBottomLeftButton(canvas, paint);
+        drawTopButton(canvas);
+        drawRightButton(canvas);
+        drawBottomButton(canvas);
+        drawLeftButton(canvas);
+        booleanDifference(canvas);
         canvas.restoreToCount(sc);
         doBlinkingAnimation();
     }
 
 
-    private void drawTopLeftButton(Canvas canvas, Paint paint){
-        // Source image (src)
+    private void drawLeftButton(Canvas canvas){
+        clearCoords();
         pathSrc = new Path();
+        pathSrc = drawSvgPath("M 75.865948,436.13405", pathSrc, 1f);
+        pathSrc = drawSvgPath("C -25,337.00001 -25,177.00001 75.865947,75.865953", pathSrc, 1f);
+        pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_WW], pathSrc);
+    }
+
+
+    private void drawTopButton(Canvas canvas){
+        clearCoords();
+        pathSrc = new Path();
+        pathSrc = drawSvgPath("M 436.13405,75.865951", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 385,27.000014 323.56337,1.2519842 256,1.2519836 188.43662,1.2519839 125,27.000014 75.865948,75.865952", pathSrc, 1f);
+        pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NN], pathSrc);
+    }
+
+
+    private void drawRightButton(Canvas canvas){
+        clearCoords();
+        pathSrc = new Path();
+        pathSrc = drawSvgPath("M 436.13404,75.865942", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 485,122.00001 510.74802,188.43661 510.74802,255.99999 510.74802,323.56337 485,387.00001 436.13405,436.13405", pathSrc, 1f);
+        pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_EE], pathSrc);
+    }
+
+
+    private void drawBottomButton(Canvas canvas){
+        clearCoords();
+        pathSrc = new Path();
+        pathSrc = drawSvgPath("M 436.13405,436.13405", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 390,482.00001 323.56338,510.74802 256,510.74802 188.43662,510.74802 125,487.00001 75.865948,436.13405", pathSrc, 1f);
+        pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SS], pathSrc);
+    }
+
+    private void booleanDifference(Canvas canvas) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
         float dx1 = outterRadius - innerRadius;
-        float dx2 = outterRadius + innerRadius;
-        pathSrc.moveTo(outterRadius, outterRadius);
-        pathSrc.lineTo(outterRadius, dx1);
-        RectF rectF = new RectF(dx1, dx1, dx2, dx2);
-        pathSrc.arcTo(rectF, -90f, -90f);
-        pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, Color.WHITE, superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
-        // Destination image (dst)
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        pathDst = new Path();
-        pathDst.moveTo(outterRadius, outterRadius);
-        pathDst.lineTo(outterRadius, 0f);
-        rectF = new RectF(0f, 0f, 2*outterRadius, 2*outterRadius);
-        pathDst.arcTo(rectF, -90f, -90f);
-        pathDst.close();
-        // Default: yellow
-        Bitmap bmDst = makeDst(pathDst, defColors[BTN_NW], superRadius);
-        canvas.drawBitmap(bmDst, 0, 0, paint);
+        paint.setColor(defColors[3]);
+        canvas.drawCircle(superRadius, superRadius, innerRadius, paint);
+        canvas.drawBitmap(finalBitmap, dx1, dx1, paint);
         paint.setXfermode(null);
     }
-
-
-    private void drawTopRightButton(Canvas canvas, Paint paint){
-        // Source image (src)
-        pathSrc = new Path();
-        float dx1 = outterRadius - innerRadius;
-        float dx2 = outterRadius + innerRadius;
-        pathSrc.moveTo(0f, outterRadius);
-        pathSrc.lineTo(innerRadius, outterRadius);
-        rectSrc = new RectF(-innerRadius, dx1, innerRadius, dx2);
-        pathSrc.arcTo(rectSrc, 0f, -90f);
-        pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, Color.WHITE, getWidth()/2);
-        canvas.drawBitmap(bmSrc, outterRadius, 0f, paint);
-        // Destination image (dst)
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        pathDst = new Path();
-        pathDst.moveTo(0f, outterRadius);
-        pathDst.lineTo(outterRadius, outterRadius);
-        rectDst = new RectF(-outterRadius, 0f, outterRadius, 2*outterRadius);
-        pathDst.arcTo(rectDst, 0f, -90f);
-        pathDst.close();
-        // Default: red
-        Bitmap bmDst = makeDst(pathDst, defColors[BTN_NE], superRadius);
-        canvas.drawBitmap(bmDst, outterRadius, 0, paint);
-        paint.setXfermode(null);
-    }
-
-
-    private void drawBottomRightButton(Canvas canvas, Paint paint){
-        // Source image (src)
-        pathSrc = new Path();
-        pathSrc.moveTo(0f, 0f);
-        pathSrc.lineTo(innerRadius, 0f);
-        rectSrc = new RectF(-innerRadius, -innerRadius, innerRadius, innerRadius);
-        pathSrc.arcTo(rectSrc, 0f, 90f);
-        pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, Color.WHITE, superRadius);
-        canvas.drawBitmap(bmSrc, outterRadius, outterRadius, paint);
-        // Destination image (dst)
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        pathDst = new Path();
-        pathDst.moveTo(0f, 0f);
-        pathDst.lineTo(outterRadius, 0f);
-        rectDst = new RectF(-outterRadius, -outterRadius, outterRadius, outterRadius);
-        pathDst.arcTo(rectDst, 0f, 90f);
-        pathDst.close();
-        // Default: blue
-        Bitmap bmDst = makeDst(pathDst, defColors[BTN_SE], superRadius);
-        canvas.drawBitmap(bmDst, outterRadius, outterRadius, paint);
-        paint.setXfermode(null);
-    }
-
-
-    private void drawBottomLeftButton(Canvas canvas, Paint paint){
-        // Source image (src)
-        pathSrc = new Path();
-        float dx1 = outterRadius - innerRadius;
-        float dx2 = outterRadius + innerRadius;
-        pathSrc.moveTo(outterRadius, 0f);
-        pathSrc.lineTo(outterRadius, dx1);
-        rectSrc = new RectF(dx1, -innerRadius, dx2, innerRadius);
-        pathSrc.arcTo(rectSrc, 90f, 90f);
-        pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, Color.WHITE, superRadius);
-        canvas.drawBitmap(bmSrc, 0f, outterRadius, paint);
-        // Destination image (dst)
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        pathDst = new Path();
-        pathDst.moveTo(outterRadius, 0f);
-        pathDst.lineTo(outterRadius, outterRadius);
-        rectDst = new RectF(0f, -outterRadius, 2*outterRadius, outterRadius);
-        pathDst.arcTo(rectDst, 90f, 90f);
-        pathDst.close();
-        //Default: green
-        Bitmap bmDst = makeDst(pathDst, defColors[BTN_SW], superRadius);
-        canvas.drawBitmap(bmDst, 0f, outterRadius, paint);
-        paint.setXfermode(null);
-    }
-
 
     @Override
-    protected void onTouchInsideSlice() {
-        super.onTouchInsideSlice();
-        if (touchX > 0 && touchY > 0){
-            indexButton = BTN_NE;
+    protected void onTouchColour() {
+        super.onTouchColour();
+        if (isSameColor(defColors[BTN_NN])){
+            indexButton = BTN_NN;
             startBlinkingAnimation();
-            if (onClickTopRightSlice != null){
-                onClickTopRightSlice.onClick();
+            if (onClickSectorNN != null){
+                onClickSectorNN.onClick();
             }
         }
-        if (touchX < 0 && touchY > 0){
-            indexButton = BTN_NW;
+        if (isSameColor(defColors[BTN_SS])){
+            indexButton = BTN_SS;
             startBlinkingAnimation();
-            if (onClickTopLeftSlice != null){
-                onClickTopLeftSlice.onClick();
+            if (onClickSectorSS != null){
+                onClickSectorSS.onClick();
             }
         }
-        if (touchX < 0 && touchY < 0){
-            indexButton = BTN_SW;
+        if (isSameColor(defColors[BTN_EE])){
+            indexButton = BTN_EE;
             startBlinkingAnimation();
-            if (onClickBottomLeftSlice != null) {
-                onClickBottomLeftSlice.onClick();
+            if (onClickSectorEE != null){
+                onClickSectorEE.onClick();
             }
         }
-        if (touchX > 0 && touchY < 0){
-            indexButton = BTN_SE;
+        if (isSameColor(defColors[BTN_WW])){
+            indexButton = BTN_WW;
             startBlinkingAnimation();
-            if (onClickBottomRightSlice != null) {
-                onClickBottomRightSlice.onClick();
+            if (onClickSectorWW != null){
+                onClickSectorWW.onClick();
             }
         }
     }
-
-
-
 
 }

@@ -13,9 +13,17 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,75 +32,14 @@ import java.util.TimerTask;
  * Created by Herbert Caller on 30/05/2017.
  */
 
-public class BaseShapeView extends View {
-
-    public interface OnClickLeftSlice{
-        void onClick();
-    }
-
-    public interface OnClickRightSlice{
-        void onClick();
-    }
-
-    public interface OnClickTopSlice{
-        void onClick();
-    }
-
-    public interface OnClickBottomSlice{
-        void onClick();
-    }
-
-    public interface OnClickTopRightSlice{
-        void onClick();
-    };
-
-    public interface OnClickTopLeftSlice{
-        void onClick();
-    };
-
-    public interface OnClickBottomRightSlice{
-        void onClick();
-    };
-
-    public interface OnClickBottomLeftSlice{
-        void onClick();
-    };
-
-    public interface OnClickMiddleBrick{
-        void onClick();
-    }
-
-    public interface OnClickRightmostButton{
-        void onClick();
-    }
-
-    public interface OnClickLeftmostButton{
-        void onClick();
-    }
+public class BaseShapeView extends BaseEventView {
 
     protected boolean isAnimationOn = false;
-    protected static final int BTN_NN = 0;
-    protected static final int BTN_NE = 1;
-    protected static final int BTN_EE = 2;
-    protected static final int BTN_SE = 3;
-    protected static final int BTN_SS = 4;
-    protected static final int BTN_SW = 5;
-    protected static final int BTN_WW = 6;
-    protected static final int BTN_NW = 7;
-
-    protected OnClickTopSlice onClickTopSlice;
-    protected OnClickBottomSlice onClikBottomSlice;
-    protected OnClickLeftSlice onClickLeftSlice;
-    protected OnClickRightSlice onClickRightSlice;
-    protected OnClickTopRightSlice onClickTopRightSlice;
-    protected OnClickTopLeftSlice onClickTopLeftSlice;
-    protected OnClickBottomLeftSlice onClickBottomLeftSlice;
-    protected OnClickBottomRightSlice onClickBottomRightSlice;
-    protected OnClickMiddleBrick onClickMiddleBrick;
-    protected OnClickLeftmostButton onClickLeftmostButton;
-    protected OnClickRightmostButton onClickRightmostButton;
 
     protected float touchX, touchY;
+    protected float eventX, eventY;
+    protected Bitmap finalBitmap;
+
 
     protected float sourceSize = 512f;
     protected long originTime = System.currentTimeMillis();
@@ -103,11 +50,10 @@ public class BaseShapeView extends View {
     protected float outterRadius = 120f;
     protected float innerRadius = 0f;
     protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.DKGRAY,
-            Color.YELLOW, Color.MAGENTA, Color.LTGRAY, Color.CYAN};
+            Color.YELLOW, Color.MAGENTA, Color.LTGRAY, Color.CYAN, Color.BLACK};
     protected int[] defColors = initColors.clone();
     protected String[] textButton = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
-    protected Path pathSrc, pathDst;
-    protected RectF rectSrc, rectDst;
+    protected Path pathSrc;
     protected float lastX, lastY;
     protected int indexButton = -1;
 
@@ -117,14 +63,17 @@ public class BaseShapeView extends View {
 
     public BaseShapeView(Context context) {
         super(context);
+        this.setDrawingCacheEnabled(true);
     }
 
     public BaseShapeView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.setDrawingCacheEnabled(true);
     }
 
     public BaseShapeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setDrawingCacheEnabled(true);
     }
 
     @Override
@@ -143,45 +92,38 @@ public class BaseShapeView extends View {
 
         superRadius = canvasBroad/2;
         outterRadius = 1f*superRadius;
+        finalBitmap = Bitmap.createBitmap(canvasBroad, canvasBroad, Bitmap.Config.ARGB_8888);
         setMeasuredDimension(canvasBroad, canvasLong);
     }
 
-    protected Bitmap makeDst(Path path, int color, int size){
-        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bm);
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(color);
-        c.drawPath(path, p);
-
-        return bm;
+    protected void drawColorPathBitmap(Canvas canvas, float left, float top, int color, Path pathSrc){
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(color);
+        paint.setColor(color);
+        canvas.drawPath(pathSrc, paint);
+        canvas.drawBitmap(finalBitmap, left, top, paint);
     }
 
-    protected Bitmap makeCircleDst(int color, int size){
-        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bm);
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(color);
-        c.drawCircle(innerRadius, innerRadius, innerRadius, p);
+    protected void drawColorRectBitmap(Canvas canvas, String rect, int color){
+        float scale = canvasBroad / sourceSize;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(color);
+        paint.setColor(color);
+        XmlPullParser parser = Xml.newPullParser();
+        try {
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(new ByteArrayInputStream(rect.getBytes()), null);
+            parser.nextTag();
+            float x = scale*Float.parseFloat(parser.getAttributeValue(null, "x"));
+            float y = scale*Float.parseFloat(parser.getAttributeValue(null, "y"));
+            float height = scale*Float.parseFloat(parser.getAttributeValue(null, "height"));
+            float width = scale*Float.parseFloat(parser.getAttributeValue(null, "width"));
+            canvas.drawRect(x, y, x + width, y+ height, paint);
+            canvas.drawBitmap(finalBitmap, 0, 0, paint);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return bm;
-    }
-
-    protected Bitmap makeSrc(Path path, int color, int size){
-        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bm);
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(color);
-        c.drawPath(path, p);
-        return bm;
-    }
-
-    protected Bitmap makeRect(RectF rectF, int color, int size){
-        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bm);
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(color);
-        c.drawRect(rectF, p);
-        return bm;
     }
 
     protected int lightenColour(int rgb){
@@ -192,26 +134,6 @@ public class BaseShapeView extends View {
         return Color.HSVToColor(hsv);
     }
 
-    protected void startButtonBlink(){
-        /*
-        if (highTimer != null){
-            highTimer.cancel();
-            highTimer.purge();
-            highTimer = null;
-        }
-        if (lowTimer != null){
-            lowTimer.cancel();
-            lowTimer.purge();
-            lowTimer = null;
-        }
-        highTimer = new Timer();
-        lowTimer = new Timer();
-        if (indexButton != -1){
-            highTimer.scheduleAtFixedRate(new ButtonHighTask(),500, 500);
-            lowTimer.scheduleAtFixedRate(new ButtonLowTask(),250, 500);
-        }
-        */
-    }
 
     protected void startBlinkingAnimation(){
         isAnimationOn = true;
@@ -243,105 +165,26 @@ public class BaseShapeView extends View {
         //Log.d("Animation on -->", String.valueOf(isAnimationOn));
     }
 
-
-    protected void stopButtonBlink(){
-        /*
-        if (highTimer != null){
-            highTimer.cancel();
-            highTimer.purge();
-            highTimer = null;
-        }
-        if (lowTimer != null){
-            lowTimer.cancel();
-            lowTimer.purge();
-            lowTimer = null;
-        }
-        defColors = initColors.clone();
-        invalidate();
-        */
-    }
-
-
-    private class ButtonHighTask extends TimerTask {
-        @Override
-        public void run() {
-            handler.obtainMessage(1).sendToTarget();
-        }
-    }
-
-    private class ButtonLowTask extends TimerTask{
-        @Override
-        public void run() {
-            handler.obtainMessage(2).sendToTarget();
-        }
-    }
-
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1){
-                defColors = Arrays.copyOf(initColors, initColors.length);
-                defColors[indexButton] = lightenColour(initColors[indexButton]);
-            } else {
-                defColors = initColors.clone();
-            }
-            invalidate();
-        }
-    };
-
-    public void setOnClickTopSlice(OnClickTopSlice onClickTopSlice) {
-        this.onClickTopSlice = onClickTopSlice;
-    }
-
-    public void setOnClickBottomSlice(OnClickBottomSlice onClickBottomSlice) {
-        this.onClikBottomSlice = onClikBottomSlice;
-    }
-
-    public void setOnClickTopRightSlice(OnClickTopRightSlice onClickTopRightSlice) {
-        this.onClickTopRightSlice = onClickTopRightSlice;
-    }
-
-    public void setOnClickTopLeftSlice(OnClickTopLeftSlice onClickTopLeftSlice) {
-        this.onClickTopLeftSlice = onClickTopLeftSlice;
-    }
-
-    public void setOnClickBottomLeftSlice(OnClickBottomLeftSlice onClickBottomLeftSlice) {
-        this.onClickBottomLeftSlice = onClickBottomLeftSlice;
-    }
-
-    public void setOnClickBottomRightSlice(OnClickBottomRightSlice onClickBottomRightSlice) {
-        this.onClickBottomRightSlice = onClickBottomRightSlice;
-    }
-
-    public void setOnClickLeftSlice(OnClickLeftSlice onClickLeftSlice) {
-        this.onClickLeftSlice = onClickLeftSlice;
-    }
-
-    public void setOnClickRightSlice(OnClickRightSlice onClickRightSlice) {
-        this.onClickRightSlice = onClickRightSlice;
-    }
-
-    public void setOnClikBottomSlice(OnClickBottomSlice onClikBottomSlice) {
-        this.onClikBottomSlice = onClikBottomSlice;
-    }
-
-    public void setOnClickMiddleBrick(OnClickMiddleBrick onClickMiddleBrick) {
-        this.onClickMiddleBrick = onClickMiddleBrick;
-    }
-
-    public void setOnClickLeftmostButton(OnClickLeftmostButton onClickLeftmostButton) {
-        this.onClickLeftmostButton = onClickLeftmostButton;
-    }
-
-    public void setOnClickRightmostButton(OnClickRightmostButton onClickRightmostButton) {
-        this.onClickRightmostButton = onClickRightmostButton;
+    public boolean isSameColor(int color){
+        Bitmap cacheBitmap = this.getDrawingCache();
+        int width = cacheBitmap.getWidth();
+        float scale = width/(1f*canvasBroad);
+        int xCoord = (int) (eventX*scale);
+        int yCoord = (int) (eventY*scale);
+        int pixelColor = cacheBitmap.getPixel(xCoord, yCoord);
+        if (pixelColor == color)
+            return true;
+        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            touchX = event.getX()-superRadius;
-            touchY = superRadius - event.getY();
+            eventX = event.getX();
+            eventY = event.getY();
+            touchX = eventX - superRadius;
+            touchY = superRadius - eventY;
+            onTouchColour();
             Log.d("Coordinates", String.format("x: %f, y: %f", touchX ,touchY));
             boolean inside = (touchX*touchX + touchY*touchY < outterRadius*outterRadius)
                     && (touchX*touchX + touchY*touchY > innerRadius*innerRadius);
@@ -349,15 +192,17 @@ public class BaseShapeView extends View {
                 onTouchInsideSlice();
             } else {
                 stopBlinkingAnimation();
-                //stopButtonBlink();
             }
         }
         return true;
-        //return super.onTouchEvent(event);
     }
 
     protected void onTouchInsideSlice(){
         //Log.d("Animation on -->", String.valueOf(isAnimationOn));
+    }
+
+    protected void onTouchColour(){
+
     }
 
     private Runnable updateRunnable = new Runnable() {
@@ -372,13 +217,6 @@ public class BaseShapeView extends View {
         postDelayed(updateRunnable, 200L);
     }
 
-    public void stopBaseShapeViewUpdate(){
-        removeCallbacks(updateRunnable);
-    }
-
-    public void startBaseShapeViewUpdate(){
-        updateBaseShapeView();
-    }
 
     public float getCoord(String coord){
         return 2f*Float.parseFloat(coord)*outterRadius/sourceSize;

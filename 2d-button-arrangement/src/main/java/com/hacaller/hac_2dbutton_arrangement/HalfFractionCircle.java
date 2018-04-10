@@ -19,13 +19,14 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 /**
- * Created by AGB on 31/05/2017.
+ * Created by Herbert Caller on 31/05/2017.
  */
 
 public class HalfFractionCircle extends BaseShapeView {
 
     public HalfFractionCircle(Context context) {
         super(context);
+
     }
 
     public HalfFractionCircle(Context context, @Nullable AttributeSet attrs) {
@@ -40,47 +41,42 @@ public class HalfFractionCircle extends BaseShapeView {
     @Override
     protected void onDraw(Canvas canvas) {
         Log.d("Current time -->", String.valueOf(System.currentTimeMillis()));
-        canvas.drawColor(Color.TRANSPARENT);
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setFilterBitmap(false);
-        canvas.drawRect(0, 0, getWidth(), getWidth(), paint);
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
                 Canvas.ALL_SAVE_FLAG);
         innerRadius = 0.5f*outterRadius;
-        drawLeftButton(canvas, paint);
-        drawRightButton(canvas, paint);
-        booleanDiffence(canvas, paint);
-        paintSliceText(canvas, paint);
+        drawLeftButton(canvas);
+        drawRightButton(canvas);
+        booleanDifference(canvas);
+        //paintSliceText(canvas, paint);
         canvas.restoreToCount(sc);
         doBlinkingAnimation();
     }
 
-    private void drawLeftButton(Canvas canvas, Paint paint) {
+    private void drawLeftButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
         pathSrc = drawSvgPath("M 256.52917,511.72354", pathSrc, 1f);
         pathSrc = drawSvgPath("C 115.38799,511.72354 -5.7202626,397.90001 0.0467967,256.75881 -5.7202626,117.13527 114.24974,0.69379 255.39093,0.27644", pathSrc, 1f);
         pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_WW], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_WW], pathSrc);
     }
 
-    private void drawRightButton(Canvas canvas, Paint paint) {
+    private void drawRightButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
         pathSrc = drawSvgPath("M 255.47083,0.27647", pathSrc, 1f);
         pathSrc = drawSvgPath("C 396.612,0.27647 517.72026,114.1 511.9532,255.24119 517.72026,394.86473 397.75025,511.30622 256.60907,511.72357", pathSrc, 1f);
         pathSrc.close();
-        Bitmap bmSrc = makeSrc(pathSrc, defColors[BTN_EE], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_EE], pathSrc);
     }
 
-    private void booleanDiffence(Canvas canvas, Paint paint) {
+    private void booleanDifference(Canvas canvas) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
         float dx1 = outterRadius - innerRadius;
-        Bitmap bmDst = makeCircleDst(defColors[3], (int) (2*innerRadius));
-        canvas.drawBitmap(bmDst, dx1, dx1, paint);
+        paint.setColor(defColors[3]);
+        canvas.drawCircle(superRadius, superRadius, innerRadius, paint);
+        canvas.drawBitmap(finalBitmap, dx1, dx1, paint);
         paint.setXfermode(null);
     }
 
@@ -102,20 +98,20 @@ public class HalfFractionCircle extends BaseShapeView {
     }
 
     @Override
-    protected void onTouchInsideSlice() {
-        super.onTouchInsideSlice();
-        if (touchX > 0){
+    protected void onTouchColour() {
+        super.onTouchColour();
+        if (isSameColor(defColors[BTN_EE])){
             indexButton = BTN_EE;
             startBlinkingAnimation();
-            if (onClickTopRightSlice != null){
-                onClickTopRightSlice.onClick();
+            if (onClickSectorEE != null){
+                onClickSectorEE.onClick();
             }
         }
-        if (touchX < 0 ){
+        if (isSameColor(defColors[BTN_WW])){
             indexButton = BTN_WW;
             startBlinkingAnimation();
-            if (onClickTopLeftSlice != null){
-                onClickTopLeftSlice.onClick();
+            if (onClickSectorWW != null){
+                onClickSectorWW.onClick();
             }
         }
     }

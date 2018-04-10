@@ -36,103 +36,114 @@ public class FiveBoxChecker extends BaseShapeView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         unitLength = 2*superRadius/3f;
-        canvas.drawColor(Color.TRANSPARENT);
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setFilterBitmap(false);
-        canvas.drawRect(0, 0, getWidth(), getWidth(), paint);
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
                 Canvas.ALL_SAVE_FLAG);
-
-        drawTopLeftButton(canvas, paint);
-        drawTopRightButton(canvas, paint);
-        drawMiddleButton(canvas, paint);
-        drawBottomLeftButton(canvas, paint);
-        drawBottomRightButton(canvas, paint);
-
+        drawTopLeftButton(canvas);
+        drawTopRightButton(canvas);
+        drawMiddleButton(canvas);
+        drawBottomLeftButton(canvas);
+        drawBottomRightButton(canvas);
         canvas.restoreToCount(sc);
         doBlinkingAnimation();
     }
 
-    private void drawTopLeftButton(Canvas canvas, Paint paint) {
-        pathSrc = new Path();
-        RectF rectF = new RectF(0f, 0f, unitLength, unitLength);
-        Bitmap bmSrc = makeRect(rectF, defColors[BTN_NW], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    private void drawTopLeftButton(Canvas canvas) {
+        clearCoords();
+        String rect = "<rect\n" +
+                "     y=\"0.0010070801\"\n" +
+                "     x=\"-0.66599464\"\n" +
+                "     height=\"170.666\"\n" +
+                "     width=\"170.666\"\n" +
+                "     id=\"rect4698\"\n" +
+                "     style=\"opacity:0.15;fill:#d45500;fill-opacity:1;stroke:none;stroke-width:0.26458332\" />";
+        drawColorRectBitmap(canvas, rect, defColors[BTN_NW]);
     }
 
-    private void drawTopRightButton(Canvas canvas, Paint paint) {
-        pathSrc = new Path();
-        RectF rectF = new RectF(2*unitLength, 0f, 3*unitLength, unitLength);
-        Bitmap bmSrc = makeRect(rectF, defColors[BTN_NE], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    private void drawTopRightButton(Canvas canvas) {
+        clearCoords();
+        String rect = "<rect\n" +
+                "     y=\"0.0010070801\"\n" +
+                "     x=\"341.33301\"\n" +
+                "     height=\"170.666\"\n" +
+                "     width=\"170.666\"\n" +
+                "     id=\"rect4702\"\n" +
+                "     style=\"opacity:0.15;fill:#806600;fill-opacity:1;stroke:none;stroke-width:0.26458332\" />";
+        drawColorRectBitmap(canvas, rect, defColors[BTN_NE]);
     }
 
-    private void drawMiddleButton(Canvas canvas, Paint paint) {
-        pathSrc = new Path();
-        RectF rectF = new RectF(unitLength, unitLength, 2*unitLength, 2*unitLength);
-        Bitmap bmSrc = makeRect(rectF, defColors[BTN_WW], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    private void drawMiddleButton(Canvas canvas) {
+        clearCoords();
+        String rect = "<rect\n" +
+                "     style=\"opacity:0.15;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.26458332\"\n" +
+                "     id=\"rect4696\"\n" +
+                "     width=\"170.666\"\n" +
+                "     height=\"170.666\"\n" +
+                "     x=\"170.66699\"\n" +
+                "     y=\"170.66701\" />";
+        drawColorRectBitmap(canvas, rect, defColors[BTN_OO]);
     }
 
-    private void drawBottomLeftButton(Canvas canvas, Paint paint) {
-        pathSrc = new Path();
-        RectF rectF = new RectF(0f, 2*unitLength, unitLength, 3*unitLength);
-        Bitmap bmSrc = makeRect(rectF, defColors[BTN_SW], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    private void drawBottomLeftButton(Canvas canvas) {
+        clearCoords();
+        String rect = "<rect\n" +
+                "     y=\"341.33301\"\n" +
+                "     x=\"0.00099182129\"\n" +
+                "     height=\"170.666\"\n" +
+                "     width=\"170.666\"\n" +
+                "     id=\"rect4704\"\n" +
+                "     style=\"opacity:0.15;fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:0.26458332\" />";
+        drawColorRectBitmap(canvas, rect, defColors[BTN_SW]);
     }
 
-    private void drawBottomRightButton(Canvas canvas, Paint paint) {
-        pathSrc = new Path();
-        RectF rectF = new RectF(2*unitLength, 2*unitLength, 3*unitLength, 3*unitLength);
-        Bitmap bmSrc = makeRect(rectF, defColors[BTN_SE], 2*superRadius);
-        canvas.drawBitmap(bmSrc, 0, 0, paint);
+    private void drawBottomRightButton(Canvas canvas) {
+        clearCoords();
+        String rect = "<rect\n" +
+                "     style=\"opacity:0.15;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.26458332\"\n" +
+                "     id=\"rect4706\"\n" +
+                "     width=\"170.666\"\n" +
+                "     height=\"170.666\"\n" +
+                "     x=\"341.33301\"\n" +
+                "     y=\"341.33301\" />";
+        drawColorRectBitmap(canvas, rect, defColors[BTN_SE]);
     }
 
     @Override
-    protected void onTouchInsideSlice() {
-        super.onTouchInsideSlice();
-        if (touchX > -unitLength/2f && touchX < unitLength/2f
-                && touchY > -unitLength/2f && touchY < unitLength/2f){
-            indexButton = BTN_WW;
-            startBlinkingAnimation();
-            if (onClickMiddleBrick != null){
-                onClickMiddleBrick.onClick();
-            }
-        }
-        if (touchX > -3*unitLength/2f && touchX < -unitLength/2f
-                && touchY > unitLength/2f && touchY < 3*unitLength/2f){
-            indexButton = BTN_NW;
-            startBlinkingAnimation();
-            if (onClickTopLeftSlice != null){
-                onClickTopLeftSlice.onClick();
-            }
-        }
-        if (touchX > unitLength/2f && touchX < 3*unitLength/2f
-                && touchY > unitLength/2f && touchY < 3*unitLength/2f){
+    protected void onTouchColour() {
+        super.onTouchColour();
+        if (isSameColor(defColors[BTN_NE])){
             indexButton = BTN_NE;
             startBlinkingAnimation();
-            if (onClickTopRightSlice != null){
-                onClickTopRightSlice.onClick();
+            if (onClickSectorNE != null){
+                onClickSectorNE.onClick();
             }
         }
-        if (touchX > -3*unitLength/2f && touchX < -unitLength/2f
-                && touchY < -unitLength/2f && touchY > -3*unitLength/2f){
+        if (isSameColor(defColors[BTN_NW])){
+            indexButton = BTN_NW;
+            startBlinkingAnimation();
+            if (onClickSectorNW != null){
+                onClickSectorNW.onClick();
+            }
+        }
+        if (isSameColor(defColors[BTN_SW])){
             indexButton = BTN_SW;
             startBlinkingAnimation();
-            if (onClickBottomLeftSlice != null){
-                onClickBottomLeftSlice.onClick();
+            if (onClickSectorSW != null){
+                onClickSectorSW.onClick();
             }
         }
-        if (touchX > unitLength/2f && touchX < 3*unitLength/2f
-                && touchY < -unitLength/2f && touchY > -3*unitLength/2f){
+        if (isSameColor(defColors[BTN_SE])){
             indexButton = BTN_SE;
             startBlinkingAnimation();
-            if (onClickBottomRightSlice != null){
-                onClickBottomRightSlice.onClick();
+            if (onClickSectorSE != null){
+                onClickSectorSE.onClick();
             }
         }
-
+        if (isSameColor(defColors[BTN_OO])){
+            indexButton = BTN_OO;
+            startBlinkingAnimation();
+            if (onClickSectorOO != null){
+                onClickSectorOO.onClick();
+            }
+        }
     }
-
 }
