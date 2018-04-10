@@ -17,4 +17,18 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ButtonTest">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">320dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="ButtonTest2">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">160dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>

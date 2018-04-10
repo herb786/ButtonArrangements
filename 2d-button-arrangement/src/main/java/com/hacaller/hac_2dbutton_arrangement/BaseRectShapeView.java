@@ -16,12 +16,10 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * Created by Herbert Caller on 30/05/2017.
- */
-
-public class BaseShapeView extends BaseEventView {
+public class BaseRectShapeView extends BaseRectEventView {
 
     protected boolean isAnimationOn = false;
 
@@ -34,11 +32,8 @@ public class BaseShapeView extends BaseEventView {
     protected float sourceSizeY = 512f;
     protected long originTime = System.currentTimeMillis();
     protected long elapsedTime;
-    protected int superRadius = 120;
     protected int canvasLong;
     protected int canvasBroad;
-    protected float outterRadius = 120f;
-    protected float innerRadius = 0f;
     protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.DKGRAY,
             Color.YELLOW, Color.MAGENTA, Color.LTGRAY, Color.CYAN, Color.BLACK};
     protected int[] defColors = initColors.clone();
@@ -47,21 +42,17 @@ public class BaseShapeView extends BaseEventView {
     protected float lastX, lastY;
     protected int indexButton = -1;
 
-
-
-    //Timer highTimer, lowTimer;
-
-    public BaseShapeView(Context context) {
+    public BaseRectShapeView(Context context) {
         super(context);
         this.setDrawingCacheEnabled(true);
     }
 
-    public BaseShapeView(Context context, @Nullable AttributeSet attrs) {
+    public BaseRectShapeView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.setDrawingCacheEnabled(true);
     }
 
-    public BaseShapeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseRectShapeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setDrawingCacheEnabled(true);
     }
@@ -70,15 +61,28 @@ public class BaseShapeView extends BaseEventView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int size = Math.round(240f * getResources().getDisplayMetrics().density);
         int desiredWidth = getMeasuredWidth() != 0 ? getMeasuredWidth() : size;
-        int desiredHeight = desiredWidth;
+        int desiredHeight = desiredWidth/2;
 
         canvasBroad = resolveSize(desiredWidth, widthMeasureSpec);
-        canvasLong = resolveSize(desiredHeight, heightMeasureSpec);
+        canvasLong = canvasBroad;///2;
 
-        superRadius = canvasBroad/2;
-        outterRadius = 1f*superRadius;
-        finalBitmap = Bitmap.createBitmap(canvasBroad, canvasBroad, Bitmap.Config.ARGB_8888);
+        finalBitmap = Bitmap.createBitmap(canvasBroad, canvasLong, Bitmap.Config.ARGB_8888);
         setMeasuredDimension(canvasBroad, canvasLong);
+    }
+
+    protected Path drawClosedPathWithSrc(Path pathSrc, float scale, String srcString){
+            String pathString = "";
+            Pattern p = Pattern.compile("[a-zA-Z]");
+            Matcher m = p.matcher(srcString);
+            m.find();
+            int idx = m.start();
+            while(m.find()){
+                pathString = srcString.substring(idx, m.start()).trim();
+                pathSrc = drawSvgPath(pathString, pathSrc, scale);
+                idx = m.start();
+            }
+            pathSrc.close();
+            return pathSrc;
     }
 
     protected void drawColorPathBitmap(Canvas canvas, float left, float top, int color, Path pathSrc){
@@ -87,28 +91,6 @@ public class BaseShapeView extends BaseEventView {
         paint.setColor(color);
         canvas.drawPath(pathSrc, paint);
         canvas.drawBitmap(finalBitmap, left, top, paint);
-    }
-
-    protected void drawColorRectBitmap(Canvas canvas, String rect, int color){
-        float scale = canvasBroad / sourceSizeX;
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(color);
-        paint.setColor(color);
-        XmlPullParser parser = Xml.newPullParser();
-        try {
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(new ByteArrayInputStream(rect.getBytes()), null);
-            parser.nextTag();
-            float x = scale*Float.parseFloat(parser.getAttributeValue(null, "x"));
-            float y = scale*Float.parseFloat(parser.getAttributeValue(null, "y"));
-            float height = scale*Float.parseFloat(parser.getAttributeValue(null, "height"));
-            float width = scale*Float.parseFloat(parser.getAttributeValue(null, "width"));
-            canvas.drawRect(x, y, x + width, y+ height, paint);
-            canvas.drawBitmap(finalBitmap, 0, 0, paint);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     protected int lightenColour(int rgb){
@@ -167,23 +149,11 @@ public class BaseShapeView extends BaseEventView {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             eventX = event.getX();
             eventY = event.getY();
-            touchX = eventX - superRadius;
-            touchY = superRadius - eventY;
+            touchX = eventX - canvasBroad/2;
+            touchY = canvasLong/2 - eventY;
             onTouchColour();
-            Log.d("Coordinates", String.format("x: %f, y: %f", touchX ,touchY));
-            boolean inside = (touchX*touchX + touchY*touchY < outterRadius*outterRadius)
-                    && (touchX*touchX + touchY*touchY > innerRadius*innerRadius);
-            if ( inside ) {
-                onTouchInsideSlice();
-            } else {
-                stopBlinkingAnimation();
-            }
         }
         return true;
-    }
-
-    protected void onTouchInsideSlice(){
-        //Log.d("Animation on -->", String.valueOf(isAnimationOn));
     }
 
     protected void onTouchColour(){
@@ -202,24 +172,19 @@ public class BaseShapeView extends BaseEventView {
         postDelayed(updateRunnable, 200L);
     }
 
-
-    public float getCoord(String coord){
-        return 2f*Float.parseFloat(coord)*outterRadius/ sourceSizeX;
-    }
-
     public Path drawSvgPath(String pathString, Path path, float scale) {
         if (pathString.charAt(0) == 'M') {
             pathString = pathString.replace("M", "").trim();
             String[] c = pathString.split(" ");
             String[] d = c[0].split(",");
-            lastX = getCoord(d[0], scale);
-            lastY = getCoord(d[1], scale);
+            lastX = getCoordX(d[0], scale);
+            lastY = getCoordY(d[1], scale);
             path.moveTo(lastX, lastY);
             if (c.length>1){
                 for (int i = 1; i < c.length; i++) {
                     String[] d1 = c[i].split(",");
-                    lastX = getCoord(d1[0], scale);
-                    lastY = getCoord(d1[1], scale);
+                    lastX = getCoordX(d1[0], scale);
+                    lastY = getCoordY(d1[1], scale);
                     path.lineTo(lastX, lastY);
                 }
             }
@@ -231,31 +196,31 @@ public class BaseShapeView extends BaseEventView {
                 String[] d1 = c[i].split(",");
                 String[] d2 = c[i + 1].split(",");
                 String[] d3 = c[i + 2].split(",");
-                lastX = getCoord(d1[0], scale);
-                lastY = getCoord(d1[1], scale);
+                lastX = getCoordX(d1[0], scale);
+                lastY = getCoordY(d1[1], scale);
                 path.cubicTo(lastX, lastY,
-                        getCoord(d2[0], scale), getCoord(d2[1], scale),
-                        getCoord(d3[0], scale), getCoord(d3[1], scale));
+                        getCoordX(d2[0], scale), getCoordY(d2[1], scale),
+                        getCoordX(d3[0], scale), getCoordY(d3[1], scale));
             }
         } else if (pathString.charAt(0) == 'L') {
             pathString = pathString.replace("L", "").trim();
             String[] c = pathString.split(" ");
             for (int i = 0; i < c.length; i++) {
                 String[] d1 = c[i].split(",");
-                lastX = getCoord(d1[0], scale);
-                lastY = getCoord(d1[1], scale);
+                lastX = getCoordX(d1[0], scale);
+                lastY = getCoordY(d1[1], scale);
                 path.lineTo(lastX, lastY);
             }
         } else if (pathString.charAt(0) == 'm') {
             pathString = pathString.replace("m", "").trim();
             String[] c = pathString.split(" ");
             String[] d = c[0].split(",");
-            path.rMoveTo(getCoord(d[0], scale),
-                    getCoord(d[1], scale));
+            path.rMoveTo(getCoordX(d[0], scale),
+                    getCoordY(d[1], scale));
             if (c.length>1){
                 for (int i = 1; i < c.length; i++) {
                     String[] d1 = c[i].split(",");
-                    path.rLineTo(getCoord(d1[0], scale), getCoord(d1[1], scale));
+                    path.rLineTo(getCoordX(d1[0], scale), getCoordY(d1[1], scale));
                 }
             }
         } else if (pathString.charAt(0) == 'c') {
@@ -265,16 +230,16 @@ public class BaseShapeView extends BaseEventView {
                 String[] d1 = c[i].split(",");
                 String[] d2 = c[i + 1].split(",");
                 String[] d3 = c[i + 2].split(",");
-                path.rCubicTo(getCoord(d1[0], scale), getCoord(d1[1], scale),
-                        getCoord(d2[0], scale), getCoord(d2[1], scale),
-                        getCoord(d3[0], scale), getCoord(d3[1], scale));
+                path.rCubicTo(getCoordX(d1[0], scale), getCoordY(d1[1], scale),
+                        getCoordX(d2[0], scale), getCoordY(d2[1], scale),
+                        getCoordX(d3[0], scale), getCoordY(d3[1], scale));
             }
         } else if (pathString.charAt(0) == 'l') {
             pathString = pathString.replace("l", "").trim();
             String[] c = pathString.split(" ");
             for (int i = 0; i < c.length; i++) {
                 String[] d1 = c[i].split(",");
-                path.rLineTo(getCoord(d1[0], scale), getCoord(d1[1], scale));
+                path.rLineTo(getCoordX(d1[0], scale), getCoordY(d1[1], scale));
             }
         } else if (pathString.charAt(0) == 'q') {
             pathString = pathString.replace("q", "").trim();
@@ -282,8 +247,8 @@ public class BaseShapeView extends BaseEventView {
             for (int i = 0; i < c.length; i = i + 2) {
                 String[] d1 = c[i].split(",");
                 String[] d2 = c[i + 1].split(",");
-                path.rQuadTo(getCoord(d1[0], scale), getCoord(d1[1], scale),
-                        getCoord(d2[0], scale), getCoord(d2[1], scale));
+                path.rQuadTo(getCoordX(d1[0], scale), getCoordY(d1[1], scale),
+                        getCoordX(d2[0], scale), getCoordY(d2[1], scale));
             }
         } else if (pathString.charAt(0) == 'Q') {
             pathString = pathString.replace("Q", "").trim();
@@ -291,26 +256,30 @@ public class BaseShapeView extends BaseEventView {
             for (int i = 0; i < c.length; i = i + 2) {
                 String[] d1 = c[i].split(",");
                 String[] d2 = c[i + 1].split(",");
-                lastX = getCoord(d1[0], scale);
-                lastY = getCoord(d1[1], scale);
+                lastX = getCoordX(d1[0], scale);
+                lastY = getCoordX(d1[1], scale);
                 path.quadTo(lastX, lastY,
-                        getCoord(d2[0], scale), getCoord(d2[1], scale));
+                        getCoordX(d2[0], scale), getCoordY(d2[1], scale));
             }
         } else if (pathString.charAt(0) == 'H') {
             pathString = pathString.replace("H", "").trim();
-            lastX = getCoord(pathString, scale);
+            lastX = getCoordX(pathString, scale);
             path.lineTo(lastX, lastY);
         } else if (pathString.charAt(0) == 'V') {
             pathString = pathString.replace("V", "").trim();
-            lastY = getCoord(pathString, scale);
+            lastY = getCoordY(pathString, scale);
             path.lineTo(lastX, lastY);
         }
         return path;
     }
 
 
-    public float getCoord(String coord, float scale) {
+    public float getCoordX(String coord, float scale) {
         return scale * Float.parseFloat(coord) * canvasBroad / sourceSizeX;
+    }
+
+    public float getCoordY(String coord, float scale) {
+        return scale * Float.parseFloat(coord) * canvasLong / sourceSizeY;
     }
 
     public void clearCoords(){

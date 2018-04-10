@@ -1,4 +1,4 @@
-package com.hacaller.hac_2dbutton_arrangement;
+package com.hacaller.hac_2dbutton_arrangement.CircleSector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,6 +17,8 @@ import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
+
+import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
 
 /**
  * Created by Herbert Caller on 31/05/2017.

@@ -10,22 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-
-            <!--
-            intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter
-            -->
-        </activity>
-        <activity android:name=".ThirdFractionCircleActivity" />
-        <activity android:name=".FourthFractionCircleActivity" />
-        <activity android:name=".FifthFractionCircleActivity" />
-        <activity android:name=".HalfFractionCircleActivity">
-        </activity>
-        <activity android:name=".SixthFractionCircleActivity" />
-        <activity android:name=".FiveBoxCheckerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,11 +19,6 @@
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FancyFifthFractionCircleActivity">
-
-        </activity>
-        <activity android:name=".FancyThirdFractionCircleActivity">
-        </activity>
     </application>
 
 </manifest>

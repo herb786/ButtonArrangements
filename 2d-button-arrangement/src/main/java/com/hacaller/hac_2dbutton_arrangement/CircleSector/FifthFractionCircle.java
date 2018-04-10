@@ -1,4 +1,4 @@
-package com.hacaller.hac_2dbutton_arrangement;
+package com.hacaller.hac_2dbutton_arrangement.CircleSector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,35 +13,39 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
+
 /**
- * Created by AGB on 31/05/2017.
+ * Created by herbert on 31/05/2017.
  */
 
-public class SixthFractionCircle extends BaseShapeView {
+public class FifthFractionCircle extends BaseShapeView {
 
-    public SixthFractionCircle(Context context) {
+    public FifthFractionCircle(Context context) {
         super(context);
     }
 
-    public SixthFractionCircle(Context context, @Nullable AttributeSet attrs) {
+    public FifthFractionCircle(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SixthFractionCircle(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FifthFractionCircle(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
                 Canvas.ALL_SAVE_FLAG);
         innerRadius = 0.5f*outterRadius;
+        // Source image (src)
         drawTopLeftButton(canvas);
         drawTopRightButton(canvas);
-        drawTopButton(canvas);
-        drawBottomButton(canvas);
         drawBottomLeftButton(canvas);
         drawBottomRightButton(canvas);
+        drawBottom(canvas);
+        // Destination image (dst)
         booleanDifference(canvas);
         canvas.restoreToCount(sc);
         doBlinkingAnimation();
@@ -50,39 +54,39 @@ public class SixthFractionCircle extends BaseShapeView {
     private void drawTopLeftButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        pathSrc = drawSvgPath("M 7.6589797e-7,256.0198", pathSrc, 1f);
-        pathSrc = drawSvgPath("C -0.00707355,164.55618 49,80.000014 127.99164,34.302323", pathSrc, 1f);
+        pathSrc = drawSvgPath("M 255.981,0.0579841", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 145.18359,0.06620753 46,71.000014 12.614805,176.68767", pathSrc, 1f);
         pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
         pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NW], pathSrc);
     }
 
-
     private void drawTopRightButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        pathSrc = drawSvgPath("M 512,256.0198", pathSrc, 1f);
-        pathSrc = drawSvgPath("C 512.00707,164.55618 463,80.000014 384.00836,34.302323", pathSrc, 1f);
+        pathSrc = drawSvgPath("M 256.019,0.0579841", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 366.81641,0.06620536 465,72.000014 499.3852,176.68767", pathSrc, 1f);
         pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
         pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NE], pathSrc);
     }
 
-    private void drawTopButton(Canvas canvas) {
+
+    private void drawBottomRightButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        pathSrc = drawSvgPath("M 127.99038,34.303053", pathSrc, 1f);
-        pathSrc = drawSvgPath("C 207,-10.999986 305,-10.999986 384.01123,34.303979", pathSrc, 1f);
+        pathSrc = drawSvgPath("M 12.782051,176.17664", pathSrc, 1f);
+        pathSrc = drawSvgPath("C -21.941053,281.89947 15,398.00001 105.68783,463.28311", pathSrc, 1f);
         pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
         pathSrc.close();
-        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NN], pathSrc);
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SE], pathSrc);
     }
 
-    private void drawBottomButton(Canvas canvas) {
+    private void drawBottom(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        pathSrc = drawSvgPath("M 127.99038,477.69695", pathSrc, 1f);
-        pathSrc = drawSvgPath("C 207,523.00001 305,523.00001 384.01123,477.69602", pathSrc, 1f);
+        pathSrc = drawSvgPath("M 105.61157,463.22777", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 195,528.00001 317,528.00001 406.53545,463.12097", pathSrc, 1f);
         pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
         pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SS], pathSrc);
@@ -91,22 +95,13 @@ public class SixthFractionCircle extends BaseShapeView {
     private void drawBottomLeftButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        pathSrc = drawSvgPath("M 7.6589797e-7,256.01981", pathSrc, 1f);
-        pathSrc = drawSvgPath("C -0.00707462,347.48343 49,432.00001 127.99164,477.73729", pathSrc, 1f);
+        pathSrc = drawSvgPath("M 499.21795,176.17664", pathSrc, 1f);
+        pathSrc = drawSvgPath("C 533.94105,281.89947 496,398.00001 406.31217,463.28311", pathSrc, 1f);
         pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
         pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SW], pathSrc);
     }
 
-    private void drawBottomRightButton(Canvas canvas) {
-        clearCoords();
-        pathSrc = new Path();
-        pathSrc = drawSvgPath("M 512,256.01981", pathSrc, 1f);
-        pathSrc = drawSvgPath("C 512.00708,347.48343 463,432.00001 384.00836,477.73729", pathSrc, 1f);
-        pathSrc = drawSvgPath("L 256,256", pathSrc, 1f);
-        pathSrc.close();
-        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SE], pathSrc);
-    }
 
     private void booleanDifference(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -154,13 +149,6 @@ public class SixthFractionCircle extends BaseShapeView {
             startBlinkingAnimation();
             if (onClickSectorSS != null){
                 onClickSectorSS.onClick();
-            }
-        }
-        if (isSameColor(defColors[BTN_NN])){
-            indexButton = BTN_NN;
-            startBlinkingAnimation();
-            if (onClickSectorNN != null){
-                onClickSectorNN.onClick();
             }
         }
     }

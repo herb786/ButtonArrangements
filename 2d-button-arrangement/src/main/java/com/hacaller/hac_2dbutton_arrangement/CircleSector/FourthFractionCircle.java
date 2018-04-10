@@ -1,4 +1,4 @@
-package com.hacaller.hac_2dbutton_arrangement;
+package com.hacaller.hac_2dbutton_arrangement.CircleSector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +18,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
 
 import java.util.Arrays;
 import java.util.Timer;
