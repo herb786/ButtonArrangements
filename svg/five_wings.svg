@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512mm"
+   height="256mm"
+   viewBox="0 0 512 256"
+   version="1.1"
+   id="svg2021"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="five_wings.svg">
+  <defs
+     id="defs2015" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.5"
+     inkscape:cx="967.55906"
+     inkscape:cy="479.47279"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg2021"
+     showgrid="true"
+     inkscape:window-width="1532"
+     inkscape:window-height="693"
+     inkscape:window-x="78"
+     inkscape:window-y="78"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2566" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2018">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="opacity:0.20400002;fill:#d42aff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+     d="M 204.8,153.60001 H 307.2 V 256.00001 H 204.8 Z"
+     id="rect2576" />
+  <path
+     style="opacity:0.20400002;fill:#55ffdd;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+     d="M 409.60001,-4e-6 H 512.00001 V 102.4 H 409.60001 Z"
+     id="rect2574" />
+  <path
+     style="opacity:0.20400002;fill:#483e37;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+     d="M 0,-4e-6 H 102.4 V 102.4 H 0 Z"
+     id="rect2572" />
+  <path
+     style="opacity:0.20400002;fill:#ff8080;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+     d="M 102.4,76.799995 H 204.8 V 179.2 H 102.4 Z"
+     id="rect2570" />
+  <path
+     style="opacity:0.20400002;fill:#00aa44;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+     d="M 307.20001,76.799995 H 409.60001 V 179.2 H 307.20001 Z"
+     id="rect2568" />
+</svg>

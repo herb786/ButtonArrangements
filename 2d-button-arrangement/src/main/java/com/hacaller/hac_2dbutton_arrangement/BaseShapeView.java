@@ -16,6 +16,8 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Herbert Caller on 30/05/2017.
@@ -29,6 +31,15 @@ public class BaseShapeView extends BaseEventView {
     protected float eventX, eventY;
     protected Bitmap finalBitmap;
 
+    protected final int FIREBRICK = 0xFFB22222;
+    protected final int CORAL = 0xFFFF7F50;
+    protected final int KHAKI = 0xFFF0E68C;
+    protected final int THISTLE = 0xFFD8BFD8;
+    protected final int PALEGREEN = 0xFF98FB98;
+    protected final int DARKSEAGREEN = 0xFF8FBC8B;
+    protected final int POWDERBLUE = 0xFFB0E0E6;
+    protected final int WHEAT = 0xFFF5DEB3;
+    protected final int ROSYBROWN = 0xFFBC8F8F;
 
     protected float sourceSizeX = 512f;
     protected float sourceSizeY = 512f;
@@ -39,8 +50,8 @@ public class BaseShapeView extends BaseEventView {
     protected int canvasBroad;
     protected float outterRadius = 120f;
     protected float innerRadius = 0f;
-    protected int[] initColors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.DKGRAY,
-            Color.YELLOW, Color.MAGENTA, Color.LTGRAY, Color.CYAN, Color.BLACK};
+    protected int[] initColors = new int[]{FIREBRICK, CORAL, KHAKI, THISTLE, PALEGREEN,
+            DARKSEAGREEN, POWDERBLUE, WHEAT, ROSYBROWN};
     protected int[] defColors = initColors.clone();
     protected String[] textButton = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
     protected Path pathSrc;
@@ -80,6 +91,22 @@ public class BaseShapeView extends BaseEventView {
         finalBitmap = Bitmap.createBitmap(canvasBroad, canvasBroad, Bitmap.Config.ARGB_8888);
         setMeasuredDimension(canvasBroad, canvasLong);
     }
+
+    protected Path drawClosedPathWithSrc(Path pathSrc, float scale, String srcString){
+        String pathString = "";
+        Pattern p = Pattern.compile("[a-zA-Z]");
+        Matcher m = p.matcher(srcString);
+        m.find();
+        int idx = m.start();
+        while(m.find()){
+            pathString = srcString.substring(idx, m.start()).trim();
+            pathSrc = drawSvgPath(pathString, pathSrc, scale);
+            idx = m.start();
+        }
+        pathSrc.close();
+        return pathSrc;
+    }
+
 
     protected void drawColorPathBitmap(Canvas canvas, float left, float top, int color, Path pathSrc){
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

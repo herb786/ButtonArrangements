@@ -1,29 +1,27 @@
-package com.hacaller.hac_2dbutton_arrangement;
+package com.hacaller.hac_2dbutton_arrangement.Fives;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+
+import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
 
 /**
  * Created by herbert on 11/06/2017.
  */
 
-public class Hexagon extends BaseShapeView {
-
-    public Hexagon(Context context) {
+public class FiveBoxStar extends BaseShapeView {
+    public FiveBoxStar(Context context) {
         super(context);
     }
 
-    public Hexagon(Context context, @Nullable AttributeSet attrs) {
+    public FiveBoxStar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Hexagon(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FiveBoxStar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -31,64 +29,57 @@ public class Hexagon extends BaseShapeView {
     protected void onDraw(Canvas canvas) {
         int sc = canvas.saveLayer(0, 0, getWidth(), getWidth(), null,
                 Canvas.ALL_SAVE_FLAG);
-        drawTopLeftButton(canvas);
-        drawTopRightButton(canvas);
+        // Source image (src)
         drawTopButton(canvas);
-        drawBottomButton(canvas);
+        drawLeftButton(canvas);
+        drawRightButton(canvas);
         drawBottomLeftButton(canvas);
         drawBottomRightButton(canvas);
         canvas.restoreToCount(sc);
         doBlinkingAnimation();
     }
 
-    private void drawTopLeftButton(Canvas canvas) {
-        clearCoords();
-        pathSrc = new Path();
-        String srcString = "M 127.99994,34.297649 0,255.99987 255.99987,256.00013 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
-        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NW], pathSrc);
-    }
-
-
-    private void drawTopRightButton(Canvas canvas) {
-        clearCoords();
-        pathSrc = new Path();
-        String srcString = "M 384.00007,34.297649 512,255.99987 256.00013,256.00013 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
-        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NE], pathSrc);
-    }
-
     private void drawTopButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        String srcString = "M 127.99994,34.297649 255.99987,255.99987 383.99981,34.297649 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
+        pathSrc = drawSvgPath("M 255.99999,12.529533 335.10835,172.82056 176.89166,172.82055", pathSrc, 1f);
+        pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NN], pathSrc);
     }
 
-    private void drawBottomButton(Canvas canvas) {
+    private void drawLeftButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        String srcString = "M 255.99987,255.99987 127.99994,477.70261 H 383.99981 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
-        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SS], pathSrc);
+        pathSrc = drawSvgPath("M 128,323.29358 -3.0260608e-7,198.52442 176.89166,172.82055", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NW], pathSrc);
     }
+
+    private void drawRightButton(Canvas canvas) {
+        clearCoords();
+        pathSrc = new Path();
+        pathSrc = drawSvgPath("M 335.10835,172.82056 512,198.52441 384,323.29358", pathSrc, 1f);
+        pathSrc.close();
+        drawColorPathBitmap(canvas, 0, 0, defColors[BTN_NE], pathSrc);
+    }
+
 
     private void drawBottomLeftButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        String srcString = "M 0,255.99987 127.99994,477.70261 255.99987,256.00013 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
+        pathSrc = drawSvgPath("M 256,416.29102 97.783309,499.47047 128,323.29358", pathSrc, 1f);
+        pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SW], pathSrc);
     }
 
     private void drawBottomRightButton(Canvas canvas) {
         clearCoords();
         pathSrc = new Path();
-        String srcString = "M 512,255.99987 384.00007,477.70261 256.00013,256.00013 Z";
-        pathSrc = drawClosedPathWithSrc(pathSrc, 1f, srcString);
+        pathSrc = drawSvgPath("M 384,323.29358 256,416.29102 414.21672,499.47046", pathSrc, 1f);
+        pathSrc.close();
         drawColorPathBitmap(canvas, 0, 0, defColors[BTN_SE], pathSrc);
     }
+
 
 
     @Override
@@ -122,13 +113,6 @@ public class Hexagon extends BaseShapeView {
                 onClickSectorSE.onClick();
             }
         }
-        if (isSameColor(defColors[BTN_SS])){
-            indexButton = BTN_SS;
-            startBlinkingAnimation();
-            if (onClickSectorSS != null){
-                onClickSectorSS.onClick();
-            }
-        }
         if (isSameColor(defColors[BTN_NN])){
             indexButton = BTN_NN;
             startBlinkingAnimation();
@@ -137,4 +121,5 @@ public class Hexagon extends BaseShapeView {
             }
         }
     }
+
 }

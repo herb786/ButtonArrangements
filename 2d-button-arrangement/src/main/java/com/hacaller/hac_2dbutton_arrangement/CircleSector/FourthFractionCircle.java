@@ -1,29 +1,15 @@
 package com.hacaller.hac_2dbutton_arrangement.CircleSector;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
-import android.graphics.Region;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
-
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Herbert Caller on 29/05/2017.

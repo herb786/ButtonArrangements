@@ -1,15 +1,11 @@
 package com.hacaller.hac_2dbutton_arrangement.CircleSector;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 

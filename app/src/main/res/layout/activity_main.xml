@@ -42,15 +42,69 @@
         android:visibility="gone"
         style="@style/ButtonTest" />
 
-    <com.hacaller.hac_2dbutton_arrangement.FiveBoxChecker
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxChecker
         android:id="@+id/test08"
         android:visibility="gone"
         style="@style/ButtonTest" />
 
-    <com.hacaller.hac_2dbutton_arrangement.FiveBoxArch
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxArch
         android:id="@+id/test09"
-        android:visibility="visible"
+        android:visibility="gone"
         style="@style/ButtonTest2" />
 
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxPodium
+        android:id="@+id/test10"
+        android:visibility="gone"
+        style="@style/ButtonTest2" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxSnake
+        android:id="@+id/test11"
+        android:visibility="gone"
+        style="@style/ButtonTest2" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxWings
+        android:id="@+id/test12"
+        android:visibility="gone"
+        style="@style/ButtonTest2" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveBoxStar
+        android:id="@+id/test13"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fives.FiveSegmentCircle
+        android:id="@+id/test14"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fours.FourBoxCross
+        android:id="@+id/test15"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fours.FourBoxTriangle
+        android:id="@+id/test16"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fours.FourDrops
+        android:id="@+id/test17"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fours.FourSegmentCircle
+        android:id="@+id/test18"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Fours.FourCorners
+        android:id="@+id/test19"
+        android:visibility="gone"
+        style="@style/ButtonTest" />
+
+    <com.hacaller.hac_2dbutton_arrangement.Hexagon
+        android:id="@+id/test20"
+        android:visibility="visible"
+        style="@style/ButtonTest" />
 
 </LinearLayout>

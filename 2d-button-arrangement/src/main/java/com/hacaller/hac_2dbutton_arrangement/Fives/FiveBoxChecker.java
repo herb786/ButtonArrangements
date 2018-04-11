@@ -1,15 +1,11 @@
-package com.hacaller.hac_2dbutton_arrangement;
+package com.hacaller.hac_2dbutton_arrangement.Fives;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+
+import com.hacaller.hac_2dbutton_arrangement.BaseShapeView;
 
 /**
  * Created by herbert on 11/06/2017.

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512mm"
+   height="256mm"
+   viewBox="0 0 512 256"
+   version="1.1"
+   id="svg823"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="five_podium.svg">
+  <defs
+     id="defs817" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.31470947"
+     inkscape:cx="967.55906"
+     inkscape:cy="332.05229"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg823"
+     showgrid="true"
+     inkscape:window-width="1197"
+     inkscape:window-height="776"
+     inkscape:window-x="303"
+     inkscape:window-y="119"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1370" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata820">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="opacity:0.15;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.20144948"
+     d="M 409.60001,153.59999 H 512.00001 V 255.99999 H 409.60001 Z"
+     id="rect1378" />
+  <path
+     style="opacity:0.15;fill:#ff9955;fill-opacity:1;stroke:none;stroke-width:0.20144948"
+     d="M 307.20001,76.799995 H 409.60001 V 179.2 H 307.20001 Z"
+     id="rect1376" />
+  <path
+     style="opacity:0.15;fill:#ff2a2a;fill-opacity:1;stroke:none;stroke-width:0.20144948"
+     d="M 204.8,-8e-6 H 307.2 V 102.39999 H 204.8 Z"
+     id="rect1374" />
+  <path
+     style="opacity:0.15;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.20144948"
+     d="M 102.4,76.799995 H 204.8 V 179.2 H 102.4 Z"
+     id="rect1372" />
+  <path
+     style="opacity:0.15;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.20144948"
+     d="M 0,153.59998 H 102.4 V 255.99998 H 0 Z"
+     id="rect1368" />
+</svg>
